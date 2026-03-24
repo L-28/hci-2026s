@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.6.5)  24 MAR 2026 15:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.6.5)  24 MAR 2026 16:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -461,7 +461,7 @@ Package rerunfilecheck Info: File `m1.out' has not changed.
 Here is how much of TeX's memory you used:
  12066 strings out of 473190
  196162 string characters out of 5715801
- 721644 words of memory out of 5000000
+ 721634 words of memory out of 5000000
  35145 multiletter control sequences out of 15000+600000
  563131 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -472,7 +472,7 @@ Here is how much of TeX's memory you used:
 usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
 r/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/
 local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on m1.pdf (7 pages, 112150 bytes).
+Output written on m1.pdf (7 pages, 111571 bytes).
 PDF statistics:
  132 PDF objects out of 1000 (max. 8388607)
  107 compressed objects within 2 object streams
