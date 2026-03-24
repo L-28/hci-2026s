@@ -1,0 +1,118 @@
+%----------------------------------------------------------------------------
+\documentclass{article}
+%----------------------------------------------------------------------------
+\usepackage[a4paper, top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+%----------------------------------------------------------------------------
+\usepackage{paracol}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage[ngerman]{babel}
+%----------------------------------------------------------------------------
+\graphicspath{ {./images/} }
+%----------------------------------------------------------------------------
+% fancyhdr setup
+%----------------------------------------------------------------------------
+\pagestyle{fancy}	% activate fancy style
+\fancyhf{}			% clear fancy settings
+% Header
+\fancyhead[L]{Fokusthema: Vertec}
+\fancyhead[R]{v1.0}
+% Footer
+\fancyfoot[C]{Seite \thepage}
+\fancyfoot[R]{\today}
+% lines
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%----------------------------------------------------------------------------
+% first page setup
+%----------------------------------------------------------------------------
+\title{Teamprojekt}
+\author{Leonidas, Vincent, Nicko, Alexander Grath}
+\date{} % empty date
+%----------------------------------------------------------------------------
+% reference definitions
+% to use references: compile with bibtex then with pdflatex
+%----------------------------------------------------------------------------
+\begin{filecontents}{references.bib}
+@article{doe2023,
+  author  = {Doe, John and Smith, Jane},
+  title   = {An Analysis of Citation Styles},
+  journal = {IEEE Transactions on Automatic Formatting},
+  volume  = {10},
+  number  = {2},
+  pages   = {100--105},
+  year    = {2023}
+}
+%
+@book{knuth1984,
+  author    = {Knuth, Donald E.},
+  title     = {The TeXbook},
+  publisher = {Addison-Wesley},
+  year      = {1984}
+}
+\end{filecontents}
+%############################################################################
+\begin{document}
+%
+\maketitle
+%
+\thispagestyle{empty} % clear page number
+%
+% sub-title of the document
+\begin{center}
+\section*{M1 Problemanalyse}
+\end{center}
+%
+% universität wien logo
+\begin{figure}
+	\centering
+	\includegraphics[scale=.6]{univie}
+\end{figure}
+%
+\newpage
+%
+\tableofcontents
+%
+\setcounter{page}{1} % restart page count at 1
+%
+\newpage
+%
+% The \inputs can be change to \include if needed
+% put your section in the section folder and only change this document by adding another \input{...}
+% the sections are <name>_<chapter>.tex files and do NOT include any document structure code
+% thre is nothing fancy going on, the content of the files is just pasted here:
+%
+\input{sections/Leonidas}
+\input{sections/Vincent}
+\input{sections/Nicko}
+\input{sections/Alexander}
+%
+\section{Analyse von vorhandener Literatur}
+\lipsum[1-2]
+%
+\section{Analyse von Konkurrenzprodukten + der bisherigen Applikation}
+\lipsum[1-2]
+%
+\section{Nutzeranalyse und Kontextanalyse}
+\lipsum[1-2]
+%
+\section{Erstellen Sie Personas, die die wichtigsten Nutzerszenarien abdecken}
+\lipsum[1-2]
+%
+\section{Aufgabenanalyse}
+\lipsum[1-2]
+%
+\section{Projektmanagement}
+\lipsum[1-2]
+%
+\newpage
+%
+% Reference page, can be deleted if not used
+\bibliographystyle{ieeetr}
+%
+\bibliography{references}
+%
+\end{document}
