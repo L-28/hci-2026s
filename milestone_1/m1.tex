@@ -10,6 +10,8 @@
 \usepackage{lipsum}
 \usepackage{fancyhdr}
 \usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{float}
 %----------------------------------------------------------------------------
 \graphicspath{ {./images/} }
 %----------------------------------------------------------------------------
@@ -65,7 +67,7 @@
 \begin{center}
 \section*{M1 Problemanalyse}
 \end{center}
-%
+
 % universität wien logo
 \begin{figure}
 	\centering
@@ -93,8 +95,7 @@
 \section{Analyse von vorhandener Literatur}
 \lipsum[1-2]
 %
-\section{Analyse von Konkurrenzprodukten + der bisherigen Applikation}
-\lipsum[1-2]
+\input{sections/Konkurrenzanalyse}
 %
 \section{Nutzeranalyse und Kontextanalyse}
 \lipsum[1-2]
@@ -102,6 +103,8 @@
 \section{Erstellen Sie Personas, die die wichtigsten Nutzerszenarien abdecken}
 \lipsum[1-2]
 %
+
+
 \section{Aufgabenanalyse}
 \lipsum[1-2]
 %

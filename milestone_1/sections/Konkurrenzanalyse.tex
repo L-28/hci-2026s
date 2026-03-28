@@ -1,0 +1,108 @@
+\section{Analyse von Konkurrenzprodukten}
+
+\subsection{Marktüberblick}
+
+Eine erste Orientierung liefert das Anwendungsverzeichnis von \texttt{data.gv.at} für den Publisher \enquote{Stadt Wien}. Auf den ersten Blick erscheint das Angebot mit insgesamt $n = 345$ Anwendungen sehr umfangreich. Diese Zahl relativiert sich jedoch deutlich, sobald nur jene Anwendungen betrachtet werden \url{https://www.data.gv.at/applications?locale=de&page=1&publisher=Stadt+Wien}, die offene Daten tatsächlich visualisieren. Unter dieser Einschränkung reduziert sich das Feld auf rund $n = 100$ Anwendungen. Wird zusätzlich nach Webanwendungen gefiltert, verbleiben $n = 36$ Angebote und bei mobilen Anwendungen sind es nur noch $n = 8$.
+
+Für die vorliegende Arbeit ist insbesondere diese letzte Gruppe relevant, da sich das Projekt auf eine mobile App bezieht. Die nähere Betrachtung zeigt jedoch, dass es sich dabei überwiegend um hoch spezialisierte Anwendungen oder um ältere, teilweise wahrscheinlich nicht mehr aktiv genutzte Angebote handelt. Diese Lösungen sind in ihrer Zielsetzung und im Nutzungskontext nur eingeschränkt mit dem hier verfolgten Konzept einer allgemeinen Open-Data-Visualisierung vergleichbar. Daraus lässt sich ableiten, dass im spezifischen Umfeld der Wiener Open Data nur eine geringe direkte Konkurrenz besteht. Insbesondere für mobile Anwendungen im Bereich allgemeiner Open-Data-Visualisierung ist derzeit kaum ein unmittelbar vergleichbares Produkt vorhanden.
+
+\subsection{Vergleich geeigneter Referenzplattformen}
+
+Da im mobilen Bereich kaum tragfähige Vergleichsprodukte existieren, werden im Folgenden webbasierte Anwendungen als Referenzplattformen herangezogen. Diese Anwendungen sind zwar keine direkten mobilen Konkurrenzprodukte, zeigen jedoch etablierte Gestaltungs- und Interaktionsmuster für die Exploration, Filterung und Visualisierung offener Daten. Besonders relevant sind dabei thematische Navigation, interaktive Diagramme, Kartenansichten, Vergleichsfunktionen sowie die verständliche Aufbereitung komplexer Datensätze.
+
+\subsubsection{Winterthur in Zahlen}
+Winterthur in Zahlen ist ein interaktives städtisches Dashboard der Stadt Winterthur. Es zeigt aktuelle Daten rund um die Stadt und ist in den Bereich Statistik und Daten der Stadt eingebettet. Auff\"allig leicht ist die Bedienung der Seite man w\"ahlt ein Thema aus siehe  Bild 
+\ref{fig:winterthur-start} und dann bekommt man automatisch Statistiken und Visualisierungen bereitgestellt.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{../images/StadtWinterthur.png}
+    \caption{Startseite von \emph{Winterthur in Zahlen}. Die Plattform bietet einen thematisch strukturierten Einstieg in städtische Kennzahlen.}
+    \label{fig:winterthur-start}
+\end{figure}
+
+Die Startseite zeigt eine klar strukturierte thematische Navigation, über die unterschiedliche Themenbereiche direkt angewählt werden können. Dieses Muster ist für eine mobile Open-Data-Anwendung besonders relevant, da es einen einfachen und intuitiven Zugang zu komplexen Datensammlungen ermöglicht.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{../images/StadtWinterthur_vis.png}
+    \caption{Kartenbasierte Detailansicht innerhalb von \emph{Winterthur in Zahlen}. Die Plattform kombiniert thematische Orientierung mit visueller Exploration.}
+    \label{fig:winterthur-detail}
+\end{figure}
+
+\begin{enumerate}
+    \item \textbf{Vorteile}
+    \begin{enumerate}
+        \item Die Plattform weist eine sehr flüssige und reaktionsschnelle Bedienung auf.
+    \end{enumerate}
+
+    \item \textbf{Nachteile}
+    \begin{enumerate}
+        \item Die Plattform bietet nur geringe Möglichkeiten zur individuellen Anpassung der Darstellung.
+        \item Auf der Startseite bleibt am rechten Rand eine ungenutzte dunkle Fläche sichtbar, wodurch der verfügbare Platz nicht vollständig ausgeschöpft wird.
+    \end{enumerate}
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/SwissOpenGov.png}
+        \vspace{0.4em}
+
+        \small (a) Startseite von \emph{visualize.admin.ch}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/SwissOpenGov_bsp.png}
+        \vspace{0.4em}
+
+        \small (b) Editor zur Erstellung eigener Visualisierungen
+    \end{minipage}
+    \caption{}
+    \label{fig:visualize-admin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/EuroStat.png}
+        \vspace{0.4em}
+
+        \small (a) Übersicht der Eurostat-Datenvisualisierungen
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/EuroStat_bsp.png}
+        \vspace{0.4em}
+
+        \small (b) Interaktive Vergleichsansicht \emph{My country in a bubble}
+    \end{minipage}
+    \caption{}
+    \label{fig:eurostat}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/OECD_Data_exp.png}
+        \vspace{0.4em}
+
+        \small (a) \emph{OECD Data Explorer} als internationales Statistikportal
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/OECD_DAta.png}
+        \vspace{0.4em}
+
+        \small (b) Kartenansicht des \emph{OECD Local Data Portal}
+    \end{minipage}
+    \caption{}
+    \label{fig:oecd}
+\end{figure}
+
