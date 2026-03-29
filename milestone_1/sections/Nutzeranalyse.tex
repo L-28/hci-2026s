@@ -1,0 +1,98 @@
+% Nutzeranalyse und Kontextanalyse
+
+\subsubsection{Übersicht und Beschreibung von Benutzergruppen}
+
+\smallskip
+\noindent
+Das Ziel der App ist es, Open Data der Stadt Wien für eine breite Öffentlichkeit zugänglich zu machen.
+Basierend auf Nutzerinterviews und Recherchen lassen sich folgende Benutzergruppen identifizieren:
+
+\medskip
+\noindent\textbf{Primäre Nutzer:innen -- Gruppe 1: Technikaffine Studierende}
+
+\smallskip
+\noindent
+Diese Gruppe ist technisch versiert und hat Erfahrung mit Daten und Visualisierungen.
+Sie nutzen die App zur Recherche, für Uni-Projekte oder aus persönlichem Interesse.
+Sie wünschen sich genaue, detaillierte Datensätze und aussagekräftige Visualisierungen, die auch mit anderen geteilt werden können.
+\textit{Diese Gruppe wird durch die Persona Benjamin Eberhart repräsentiert.}
+Potenzielle Probleme: Frustration bei zu vereinfachter Darstellung oder fehlenden Exportmöglichkeiten.
+
+\medskip
+\noindent\textbf{Primäre Nutzer:innen -- Gruppe 2: Content Creator und Blogger}
+
+\smallskip
+\noindent
+Personen, die Daten als Inspirationsquelle oder Grundlage für eigene Inhalte verwenden.
+Sie suchen nach visuell ansprechenden Darstellungen, die sie in Blogbeiträgen oder Social-Media-Posts einsetzen können.
+Die App muss schnell verständlich sein und attraktive Visualisierungen liefern.
+\textit{Diese Gruppe wird durch die Persona Leah Reiniger repräsentiert.}
+Potenzielle Probleme: Zu komplexe Bedienung oder unattraktives Design könnte diese Gruppe abschrecken.
+
+\medskip
+\noindent\textbf{Primäre Nutzer:innen -- Gruppe 3: Berufliche Nutzer:innen}
+
+\smallskip
+\noindent
+Diese Gruppe verwendet die App im beruflichen Kontext.
+Sie benötigen spezifische Datensätze -- etwa zu Mietpreisen oder Wohnkosten -- und exportieren Visualisierungen für interne Berichte oder Präsentationen.
+Sie schreiben keinen Code, erwarten aber eine hohe Datengenauigkeit und eine intuitive Oberfläche.
+\textit{Diese Gruppe wird durch die Persona Ralph Ebersbach repräsentiert.}
+Potenzielle Probleme: Unzureichende Exportfunktionen oder ungenaue Daten würden das Vertrauen dieser Gruppe stark beeinträchtigen.
+
+\medskip
+\noindent\textbf{Sekundäre Nutzer:innen -- Gelegenheitsnutzer:innen}
+
+\smallskip
+\noindent
+Diese Gruppe hat kein vertieftes Interesse an Datenvisualisierung, nutzt die App aber dennoch,
+um schnell zu interessanten Informationen zu gelangen -- etwa für Quizabende oder alltägliche Gespräche.
+Die App muss intuitiv genug sein, damit diese Nutzer:innen ohne Vorkenntnisse schnell ans Ziel kommen.
+\textit{Diese Gruppe wird durch die Persona Luca Kunze repräsentiert.}
+
+\medskip
+\noindent\textbf{Negative Persona -- Problematische Nutzer:innen}
+
+\smallskip
+\noindent
+Daten können nicht nur für positive Zwecke verwendet werden.
+Diese Persona repräsentiert Nutzer:innen, die versuchen, Datenzusammenhänge zu missbrauchen -- etwa um manipulative oder irreführende Inhalte zu erstellen.
+Sie sind technisch versiert und wünschen sich möglichst offenen, anonymen Zugang zu so vielen Daten wie möglich.
+Für die App ergeben sich daraus wichtige Designanforderungen: Persönliche Daten müssen anonymisiert und geschützt werden.
+Alle bereitgestellten Daten müssen auf Richtigkeit überprüft sein und aus vertrauenswürdigen, zuverlässigen Quellen stammen.
+
+\subsubsection{Aufgaben und Ziele der Nutzer:innen}
+
+\smallskip
+\noindent
+Die primären Aufgaben der Nutzer:innen lassen sich gruppenübergreifend in folgende Kategorien einteilen:
+
+\begin{itemize}
+    \item \textbf{Erkunden und Entdecken:} Nutzer:innen wie Benjamin möchten neue, unbekannte Datensätze der Stadt Wien finden und durchstöbern -- ohne ein konkretes Ziel vorab zu haben.
+    \item \textbf{Gezielt Suchen:} Nutzer:innen wie Ralph haben ein spezifisches Informationsbedürfnis (z.\,B. Mietpreise, Bevölkerungsdaten) und möchten schnell zum richtigen Datensatz gelangen.
+    \item \textbf{Visualisieren und Teilen:} Nutzer:innen wie Leah möchten Daten in ansprechenden Visualisierungen darstellen und diese einfach exportieren oder in sozialen Netzwerken teilen.
+    \item \textbf{Schnell informieren:} Nutzer:innen wie Luca wollen ohne Vorkenntnisse unkompliziert zu einer interessanten Information gelangen.
+\end{itemize}
+
+\subsubsection{Potenzielle Probleme mit dem System}
+
+\begin{itemize}
+    \item \textbf{Zu komplexe Navigation:} Nutzer:innen ohne technischen Hintergrund könnten überfordert sein.
+    \item \textbf{Lange Ladezeiten:} Bei mobiler Nutzung mit schwacher Verbindung kritisch.
+    \item \textbf{Unklare Datenquellen:} Nutzer:innen könnten der Richtigkeit der Daten misstrauen.
+    \item \textbf{Fehlende Exportfunktion:} Besonders für berufliche Nutzer:innen ein Problem.
+    \item \textbf{Datenmissbrauch:} Ohne Anonymisierung könnten sensible Daten missbraucht werden.
+\end{itemize}
+
+\subsubsection{Kontextanalyse}
+
+\smallskip
+\noindent
+Die Anwendung wird primär als mobile App auf Smartphones genutzt. Daraus ergeben sich folgende Nutzungskontexte:
+
+\begin{itemize}
+    \item \textbf{Nutzungsort und -situation:} Die App wird häufig unterwegs verwendet -- in öffentlichen Verkehrsmitteln, in Pausen oder zuhause. Es ist daher mit kurzen, spontanen Nutzungssessions zu rechnen. Berufliche Nutzer:innen wie Ralph verwenden die App hingegen auch am Arbeitsplatz für gezielte Recherchen.
+    \item \textbf{Technische Rahmenbedingungen:} Da die Nutzung primär mobil erfolgt, muss die App auch bei schwacher Internetverbindung grundlegend funktionieren. Ladezeiten sollten minimal sein. Die begrenzte Bildschirmgröße erfordert kompakte, dennoch gut lesbare Visualisierungen.
+    \item \textbf{Zeitlicher Kontext:} Die meisten Nutzer:innen öffnen die App mit einem konkreten Informationsbedürfnis. Die Navigation zu den gewünschten Daten muss daher schnell und effizient sein -- komplexe Einstiegshürden sind zu vermeiden.
+    \item \textbf{Soziale Aspekte:} Ein Teil der Nutzer:innen teilt Inhalte aus der App in sozialen Netzwerken oder im persönlichen Gespräch. Eine einfache Teilen- und Exportfunktion würde den Mehrwert der App für alle Gruppen deutlich erhöhen.
+\end{itemize}
