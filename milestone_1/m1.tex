@@ -39,21 +39,15 @@
 % to use references: compile with bibtex then with pdflatex
 %----------------------------------------------------------------------------
 \begin{filecontents}{references.bib}
-@article{doe2023,
-  author  = {Doe, John and Smith, Jane},
-  title   = {An Analysis of Citation Styles},
-  journal = {IEEE Transactions on Automatic Formatting},
+@article{simple_rules,
+  author  = {Rougier, Nicolas P. and Droettboom, Michael and Bourne, Philip E.},
+  title   = {Ten Simple Rules for Better Figures},
+  journal = {PLoS Computational Biology},
+  year    = {2014},
   volume  = {10},
-  number  = {2},
-  pages   = {100--105},
-  year    = {2023}
-}
-%
-@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The TeXbook},
-  publisher = {Addison-Wesley},
-  year      = {1984}
+  number  = {9},
+  pages   = {e1003833},
+  doi     = {10.1371/journal.pcbi.1003833}
 }
 \end{filecontents}
 %############################################################################
@@ -87,13 +81,23 @@
 % the sections are <name>_<chapter>.tex files and do NOT include any document structure code
 % thre is nothing fancy going on, the content of the files is just pasted here:
 %
-\input{sections/Leonidas}
-\input{sections/Vincent}
-\input{sections/Neda}
-\input{sections/Alexander}
+\section{Analyse von vorhandener Literatur }
 %
-\section{Analyse von vorhandener Literatur}
-\lipsum[1-2]
+\input{sections/Leonidas}
+%
+\newpage
+%
+\input{sections/Vincent}
+%
+\newpage
+%
+\input{sections/Neda}
+%
+\newpage
+%
+\input{sections/Alexander_Literatur}
+%
+\newpage
 %
 \input{sections/Konkurrenzanalyse}
 %
