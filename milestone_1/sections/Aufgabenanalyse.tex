@@ -1,0 +1,17 @@
+\section{Aufgabenanalyse}
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    \textbf{User/Task} & \textbf{CS Student} & \textbf{Data-Blogerin} & \textbf{Comm. Director} & \textbf{Activist} & \textbf{Bartender} \\ \hline
+    API Zugriff & häufig & häufig & selten & sehr häufig & nie \\ \hline
+    Einträge durchstöbern & selten & häufig & selten & nie & sehr häufig \\ \hline
+    Nach Eintrag suchen & selten & häufig & selten & nie & häufig \\ \hline
+    Nach Datensatz suchen & selten & häufig & häufig & nie & selten \\ \hline
+    Einträge kategorisieren & selten & häufig & häufig & nie & selten \\ \hline
+  \end{tabular}
+  \caption{Nutzungshäufigkeit der Tasks}
+\end{table}
+%
+\bigskip
+Da ein API-Zugriff sowohl einfach zu implementieren ist, von mehreren Personas benutzt werden kann und eine gute Grundlage ist, auf der wir weitere Arbeit aufbauen können, sollte diese Aufgabe implementiert werden. Das Durchstöbern von Einträgen ist für mehrere der ausgewählten Personas wichtig und für gelegentliche NutzerInnen sehr wichtig. Es sollte also eine Methode implementiert werden, die einfach und sehr benutzerInnenfreundlich ist. Da die Suche nach Einträgen und Datensätzen sowohl für gelegentliche NutzerInnen als auch für Power-User wichtig ist, sollte eine Methode implementiert werden, die sowohl einfach ist, von gelegentlichen NutzerInnen bedient zu werden, als auch Power-Usern ermöglicht, detailliert zu suchen. Da das Kategorisieren von Einträgen am meisten von Power-Nutzern benutzt wird, sollten diese bei der Implementierung besonders bedacht werden.
