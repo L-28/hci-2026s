@@ -1,0 +1,104 @@
+%----------------------------------------------------------------------------
+\documentclass{article}
+%----------------------------------------------------------------------------
+\usepackage[a4paper, top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+%----------------------------------------------------------------------------
+\usepackage{paracol}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{float}
+\bibliographystyle{ieeetr}
+%----------------------------------------------------------------------------
+\graphicspath{ {./images/} }
+%----------------------------------------------------------------------------
+% fancyhdr setup
+%----------------------------------------------------------------------------
+\pagestyle{fancy}	% activate fancy style
+\fancyhf{}			% clear fancy settings
+% Header
+\fancyhead[L]{Meilenstein 2}
+\fancyhead[R]{v1.0}
+% Footer
+\fancyfoot[C]{Seite \thepage}
+\fancyfoot[R]{\today}
+% lines
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%----------------------------------------------------------------------------
+% first page setup
+%----------------------------------------------------------------------------
+\title{Teamprojekt}
+\author{Adaktylos Leonidas Odysseas, Baumgartner Vincent Vitez, Neda Nikkhousarighiyeh, Alexander Grath}
+\date{} % empty date
+%----------------------------------------------------------------------------
+% reference definitions
+% to use references: compile with bibtex then with pdflatex
+%----------------------------------------------------------------------------
+
+%############################################################################
+\begin{document}
+%
+\maketitle
+%
+\thispagestyle{empty} % clear page number
+%
+% sub-title of the document
+\begin{center}
+\section*{M2 Low-fidelity Prototypen}
+\end{center}
+
+% universität wien logo
+\begin{figure}
+	\centering
+	\includegraphics[scale=.6]{univie}
+\end{figure}
+%
+\newpage
+%
+\tableofcontents
+%
+\setcounter{page}{1} % restart page count at 1
+%
+\newpage
+%
+% The \inputs can be change to \include if needed
+% put your section in the section folder and only change this document by adding another \input{...}
+% the sections are <name>_<chapter>.tex files and do NOT include any document structure code
+% thre is nothing fancy going on, the content of the files is just pasted here:
+%
+\input{sections/Idee_Alexander.tex}
+\input{sections/Idee_Leonidas.tex}
+\input{sections/Idee_Neda.tex}
+\input{sections/Idee_Vincent.tex}
+%
+\input{sections/Prototyp_Alexander.tex}
+\input{sections/Prototyp_Leonidas.tex}
+\input{sections/Prototyp_Neda.tex}
+\input{sections/Prototyp_Vincent.tex}
+%
+\input{sections/Anpassung_Alexander.tex}
+\input{sections/Anpassung_Leonidas.tex}
+\input{sections/Anpassung_Neda.tex}
+\input{sections/Anpassung_Vincent.tex}
+%
+\input{sections/Evaluierung_Alexander.tex}
+\input{sections/Evaluierung_Leonidas.tex}
+\input{sections/Evaluierung_Neda.tex}
+\input{sections/Evaluierung_Vincent.tex}
+%
+\input{sections/Arbeitsverteilung.tex}
+%
+\input{sections/KI_Nutzung.tex}
+%
+\newpage
+%
+% Reference page, can be deleted if not used
+%
+\bibliography{references}
+%
+\end{document}
