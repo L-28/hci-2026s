@@ -1,21 +1,3 @@
-\documentclass[10pt]{beamer}
-
-\usetheme{metropolis}
-\usepackage[ngerman]{babel}
-\usepackage{graphicx}
-\graphicspath{{../images/}}
-\usepackage{pifont}
-\usetikzlibrary{calc,arrows.meta}
-
-
-\newcommand{\ideaicon}{\ding{72}}
-\newcommand{\screenicon}{\ding{229}}
-\newcommand{\personicon}{\ding{110}}
-\newcommand{\checkicon}{\ding{51}}
-\newcommand{\warnicon}{\ding{115}}
-
-\begin{document}
-
 \begin{frame}{Story-Explorer Idee}
   \begin{itemize}
     \item Open Data der Stadt Wien soll auch f\"{u}r Menschen ohne technischen Hintergrund verst\"{a}ndlich sein.
@@ -23,47 +5,47 @@
     \item Der Ablauf bleibt bewusst einfach: Thema w\"{a}hlen $\rightarrow$ Datensatz w\"{a}hlen $\rightarrow$ Story verstehen.
   \end{itemize}
 \end{frame}
-
+%
 \begin{frame}{Prototyp - Startseite}
   \centering
   \begin{tikzpicture}
     \node[anchor=center] (img) {%
-      \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{Prototype_1.png}%
+      \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_1.png}%
     };
     \draw[-{Stealth[scale=1.5]}, red, line width=2pt]
       ($(img.center)+(-2.5cm, 1.5cm)$) -- ($(img.center)+(-1.0cm, 0.5cm)$)
       node[above left, red, font=\small\bfseries] at ($(img.center)+(-2.5cm, 1.5cm)$) {Umwelt};
   \end{tikzpicture}
 \end{frame}
-
+%
 \begin{frame}{Prototyp - Theme\"{u}bersicht}
   \centering
   \begin{tikzpicture}
     \node[anchor=center] (img) {%
-      \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{Prototype_2.png}%
+      \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_2.png}%
     };
     \draw[-{Stealth[scale=1.5]}, red, line width=2pt]
       ($(img.center)+(-3.2cm, 2.0cm)$) -- ($(img.center)+(-1.3cm, 2.0cm)$);
   \end{tikzpicture}
 \end{frame}
-
+%
 \begin{frame}{Prototyp - Story-Ansicht}
   \centering
   \begin{tikzpicture}
     \node[anchor=center] (img) {%
-      \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{Prototype_3.png}%
+      \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_3.png}%
     };
     \draw[-{Stealth[scale=1.5]}, red, line width=2pt]
       ($(img.center)+(3.0cm, 2.6cm)$) -- ($(img.center)+(1.3cm, 2.6cm)$);
   \end{tikzpicture}
 \end{frame}
-
+%
 \begin{frame}{Prototyp - Einstellungen}
   \centering
-  \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{Prototype_4.png}
+  \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_4.png}
 \end{frame}
-
-\begin{frame}{\personicon\ Anpassung an Personas}
+%
+\begin{frame}{Anpassung an Personas}
   \begin{itemize}
     \item{Benjamin:} Filter nach Bezirk und Zeitraum f\"{u}r gezielte Suche.
     \item{Leah:} Teilen und Exportieren sind direkt sichtbar.
@@ -71,7 +53,7 @@
     \item{Luca:} Einfache Einstiege und kurze Erkl\"{a}rungen senken die H\"{u}rde.
   \end{itemize}
 \end{frame}
-
+%
 \begin{frame}{Evaluierung -- Partner}
   \begin{block}{Feedback}
     \vspace{0.5em}
@@ -104,5 +86,3 @@
     \item Wohnbezirk als Standardfilter in Einstellungen speicherbar
   \end{itemize}
 \end{frame}
-
-\end{document}
