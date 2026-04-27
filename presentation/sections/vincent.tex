@@ -1,3 +1,89 @@
-  \begin{frame}{Vincent Prototyp}
-    ~2,5min
-  \end{frame}
+\begin{frame}{Wien in Zahlen -- Prototyp}
+  \centering
+
+  {\large\bfseries Workflow}\\[-0.2em]
+  \rule{0.55\textwidth}{0.4pt}
+
+  \vspace{0.45cm}
+
+  \begin{tikzpicture}[
+    node distance=0.9cm,
+    img/.style={
+      inner sep=2pt,
+      draw=black!25,
+      rounded corners=2pt
+    },
+    captiontext/.style={
+      font=\small,
+      align=center
+    },
+    stepnum/.style={
+      font=\scriptsize\bfseries,
+      circle,
+      draw=black!45,
+      inner sep=1.5pt,
+      minimum size=0.45cm
+    },
+    arrow/.style={
+      -{Latex[length=3mm]},
+      thick,
+      black!70
+    }
+  ]
+
+    % Bilder
+    \node[img] (customization) {
+      \alt<1->{
+        \includegraphics[width=0.25\textwidth]{../milestone_2/images/Feed_auswahl.png}
+      }{
+        \phantom{\includegraphics[width=0.25\textwidth]{../milestone_2/images/Feed_auswahl.png}}
+      }
+    };
+
+    \node[img, right=of customization] (feed) {
+      \alt<2->{
+        \includegraphics[width=0.25\textwidth]{../milestone_2/images/Feed.png}
+      }{
+        \phantom{\includegraphics[width=0.25\textwidth]{../milestone_2/images/Feed.png}}
+      }
+    };
+
+    \node[img, right=of feed] (factsheet) {
+      \alt<3->{
+        \includegraphics[width=0.25\textwidth]{../milestone_2/images/FactSheet.png}
+      }{
+        \phantom{\includegraphics[width=0.25\textwidth]{../milestone_2/images/FactSheet.png}}
+      }
+    };
+
+    % Pfeile erscheinen ebenfalls schrittweise
+    \draw<2->[arrow] (customization.east) -- (feed.west);
+    \draw<3->[arrow] (feed.east) -- (factsheet.west);
+
+    % Beschriftungen
+    \node[stepnum, below=0.18cm of customization] (s1) {
+      \alt<1->{1}{\phantom{1}}
+    };
+    \node[captiontext, below=0.05cm of s1] {
+      \alt<1->{Customization}{\phantom{Customization}}
+    };
+
+    \node[stepnum, below=0.18cm of feed] (s2) {
+      \alt<2->{2}{\phantom{2}}
+    };
+    \node[captiontext, below=0.05cm of s2] {
+      \alt<2->{Feed}{\phantom{Feed}}
+    };
+
+    \node[stepnum, below=0.18cm of factsheet] (s3) {
+      \alt<3->{3}{\phantom{3}}
+    };
+    \node[captiontext, below=0.05cm of s3] {
+      \alt<3->{Factsheet}{\phantom{Factsheet}}
+    };
+
+  \end{tikzpicture}
+
+\end{frame}
+
+
