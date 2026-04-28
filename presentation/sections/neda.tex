@@ -12,9 +12,9 @@
     \node[anchor=center] (img) {%
       \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_1.png}%
     };
-    \draw[-{Stealth[scale=1.5]}, red, line width=2pt]
+    \draw[-{Stealth[scale=1.5]}, orange, line width=2pt]
       ($(img.center)+(-2.5cm, 1.5cm)$) -- ($(img.center)+(-1.0cm, 0.5cm)$)
-      node[above left, red, font=\small\bfseries] at ($(img.center)+(-2.5cm, 1.5cm)$) {Umwelt};
+      node[above left, orange, font=\small\bfseries] at ($(img.center)+(-2.5cm, 1.5cm)$) {Umwelt};
   \end{tikzpicture}
 \end{frame}
 %
@@ -24,7 +24,7 @@
     \node[anchor=center] (img) {%
       \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_2.png}%
     };
-    \draw[-{Stealth[scale=1.5]}, red, line width=2pt]
+    \draw[-{Stealth[scale=1.5]}, orange, line width=2pt]
       ($(img.center)+(-3.2cm, 2.0cm)$) -- ($(img.center)+(-1.3cm, 2.0cm)$);
   \end{tikzpicture}
 \end{frame}
@@ -35,14 +35,7 @@
     \node[anchor=center] (img) {%
       \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_3.png}%
     };
-    \draw[-{Stealth[scale=1.5]}, red, line width=2pt]
-      ($(img.center)+(3.0cm, 2.6cm)$) -- ($(img.center)+(1.3cm, 2.6cm)$);
   \end{tikzpicture}
-\end{frame}
-%
-\begin{frame}{Prototyp - Einstellungen}
-  \centering
-  \includegraphics[width=0.90\textwidth,height=0.80\textheight,keepaspectratio]{images/Prototype_4.png}
 \end{frame}
 %
 \begin{frame}{Anpassung an Personas}
@@ -54,10 +47,10 @@
   \end{itemize}
 \end{frame}
 %
-\begin{frame}{Evaluierung -- Partner}
+\begin{frame}{Evaluierung}
   \begin{block}{Feedback}
     \vspace{0.5em}
-    \textit{,,Der klare Ablauf und der ,,Kurz erklaert``-Abschnitt haben mir besonders gut gefallen.``}
+    Der klare Ablauf und der ,,Kurz erkl\"{a}rt``-Abschnitt wurde besonders gut gefallen.
   \end{block}
 
   \vspace{0.5em}
@@ -66,23 +59,6 @@
   \vspace{0.5em}
   \textbf{Verbesserungswunsch:}
   \begin{itemize}
-    \item Klarere Hinweise zur Aktualit\"{a}t der Daten
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Evaluierung -- KI-Feedback}
-  \textbf{St\"{a}rken:}
-  \begin{itemize}
-    \item ,,Kurz erklaert``-Ansatz holt Laien ab
-    \item Barrierefreiheit (Farbschemata, Schriftgr\"{o}\ss{}en) gut bedacht
-    \item Linearer Flow (Thema $\to$ Datensatz $\to$ Story) -- \"{u}bersichtlich
-  \end{itemize}
-
-  \vspace{0.4em}
-  \textbf{Verbesserungspotenzial:}
-  \begin{itemize}
-    \item Radiobuttons $\to$ gesamte Karte klickbar machen
-    \item Begriff ,,Story`` weckt Erwartung an narratives Element
-    \item Wohnbezirk als Standardfilter in Einstellungen speicherbar
+    \item Datens\"{a}tze werden antippbar sein.
   \end{itemize}
 \end{frame}
