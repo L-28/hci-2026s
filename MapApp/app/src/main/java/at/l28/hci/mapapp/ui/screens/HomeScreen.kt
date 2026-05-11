@@ -17,6 +17,15 @@ import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.style.BaseStyle
 import org.maplibre.spatialk.geojson.Position
+import org.maplibre.compose.layers.SymbolLayer
+import org.maplibre.compose.sources.rememberGeoJsonSource
+import org.maplibre.compose.sources.GeoJsonData
+import org.maplibre.compose.expressions.dsl.*
+import org.maplibre.spatialk.geojson.Feature
+import org.maplibre.spatialk.geojson.FeatureCollection
+import org.maplibre.spatialk.geojson.Point
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import kotlinx.serialization.json.JsonObject
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,6 +52,17 @@ fun HomeScreen() {
         )
     )
 
+    val pins = remember {
+        listOf(
+            Position(longitude = 16.35, latitude = 48.20),
+            Position(longitude = 16.38, latitude = 48.22),
+            Position(longitude = 16.34, latitude = 48.25),
+            Position(longitude = 16.39, latitude = 48.18)
+        )
+    }
+
+    val pinPainter = rememberVectorPainter(Icons.Default.Place)
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
@@ -62,15 +82,26 @@ fun HomeScreen() {
                 cameraState = cameraState,
                 baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty")
             ) {
-                // Pins will be added as custom overlays or using the library's features
-                // For now, let's keep the UI pins as overlays to ensure they are visible
+                val pinSource = rememberGeoJsonSource(
+                    data = GeoJsonData.Features(
+                        FeatureCollection(
+                            pins.map { Feature(geometry = Point(it), properties = JsonObject(emptyMap())) }
+                        )
+                    )
+                )
+
+                SymbolLayer(
+                    id = "pins",
+                    source = pinSource,
+                    iconImage = image(
+                        value = pinPainter,
+                        drawAsSdf = true
+                    ),
+                    iconColor = const(Color.Black),
+                    iconSize = const(1.5f),
+                    iconAllowOverlap = const(true)
+                )
             }
-            
-            // Map Pins (Overlaid on top of MaplibreMap for now)
-            MapPin(Modifier.offset(x = 100.dp, y = 200.dp))
-            MapPin(Modifier.offset(x = 250.dp, y = 350.dp))
-            MapPin(Modifier.offset(x = 50.dp, y = 500.dp))
-            MapPin(Modifier.offset(x = 300.dp, y = 150.dp), isSelected = true)
 
             // Scale/Zoom UI elements
             Box(
