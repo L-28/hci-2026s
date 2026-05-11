@@ -16,7 +16,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Menu
+import at.l28.hci.mapapp.ui.screens.DownloadsScreen
+import at.l28.hci.mapapp.ui.screens.HomeScreen
+import at.l28.hci.mapapp.ui.screens.SettingsScreen
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
@@ -37,7 +44,7 @@ class MainActivity : ComponentActivity() {
 @PreviewScreenSizes
 @Composable
 fun MapAppApp() {
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.MAP) }
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -45,7 +52,7 @@ fun MapAppApp() {
                 item(
                     icon = {
                         Icon(
-                            painterResource(it.icon),
+                            imageVector = it.icon,
                             contentDescription = it.label
                         )
                     },
@@ -56,22 +63,23 @@ fun MapAppApp() {
             }
         }
     ) {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Greeting(
-                name = "Android",
-                modifier = Modifier.padding(innerPadding)
-            )
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (currentDestination) {
+                AppDestinations.MAP -> HomeScreen()
+                AppDestinations.DOWNLOADS -> DownloadsScreen()
+                AppDestinations.SETTINGS -> SettingsScreen()
+            }
         }
     }
 }
 
 enum class AppDestinations(
     val label: String,
-    val icon: Int,
+    val icon: ImageVector,
 ) {
-    HOME("Home", R.drawable.ic_home),
-    FAVORITES("Favorites", R.drawable.ic_favorite),
-    PROFILE("Profile", R.drawable.ic_account_box),
+    MAP("Map", Icons.Default.Map),
+    DOWNLOADS("Downloads", Icons.Default.Download),
+    SETTINGS("Settings", Icons.Default.Menu),
 }
 
 @Composable
