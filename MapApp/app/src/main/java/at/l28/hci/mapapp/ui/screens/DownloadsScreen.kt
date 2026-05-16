@@ -1,15 +1,8 @@
 package at.l28.hci.mapapp.ui.screens
 
-<<<<<<< HEAD
 import android.content.Intent
-import android.net.Uri
-=======
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntOffsetAsState
->>>>>>> 6849601 (Further refined download menu)
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -19,29 +12,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-<<<<<<< HEAD
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.FileDownload
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.StarBorder
-import androidx.compose.material.icons.filled.Stars
-=======
 import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.*
->>>>>>> 6849601 (Further refined download menu)
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
-import androidx.compose.ui.platform.LocalContext
-=======
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
->>>>>>> 6849601 (Further refined download menu)
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -67,27 +48,8 @@ data class Dataset(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DownloadsScreen() {
-<<<<<<< HEAD
-    val context = LocalContext.current
-
-    val datasets = remember {
-        mutableStateListOf(
-            Dataset("Baumkataster", "Supporting line text, lorem ipsum...", "362 MB"),
-            Dataset("Straßenzüge", "Supporting line text, lorem ipsum...", "341 MB"),
-            Dataset("Luftmessstellen", "Supporting line text, lorem ipsum...", "42 MB"),
-            Dataset("Wanderwege", "Supporting line text...", "762 MB", isDownloaded = true),
-            Dataset("Solarpotenzialkataster", "Supporting line text, lorem ipsum...", "185 MB"),
-            Dataset("Saubere Stadt", "Supporting line text, lorem ipsum...", "78 MB"),
-            Dataset("Wiener Märkte", "Supporting line text, lorem ipsum...", "138 MB"),
-            Dataset("Historische Stadtpläne", "Supporting line text, lorem ipsum...", "1,6 GB"),
-            Dataset("Gebäudeinformationen", "Supporting line text, lorem ipsum...", "218 MB"),
-            Dataset("Dachkataster (Innere Stadt)", "Supporting line text, lorem ipsum...", "114 MB")
-        )
-    }
-=======
     var searchQuery by remember { mutableStateOf("") }
     var selectedTabIndex by remember { mutableStateOf(0) }
->>>>>>> 6849601 (Further refined download menu)
 
     val allDatasets = remember {
         listOf(
@@ -103,32 +65,11 @@ fun DownloadsScreen() {
         )
     }
 
-<<<<<<< HEAD
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(datasets, key = { it.name }) { dataset ->
-            DatasetItem(
-                dataset = dataset,
-                isExpanded = expandedId == dataset.name,
-                onExpandClick = {
-                    expandedId = if (expandedId == dataset.name) null else dataset.name
-                },
-                onDownloadClick = {
-                    val index = datasets.indexOfFirst { it.name == dataset.name }
-                    if (index >= 0) datasets[index] = datasets[index].copy(isDownloaded = true)
-                },
-                onDeleteClick = {
-                    val index = datasets.indexOfFirst { it.name == dataset.name }
-                    if (index >= 0) datasets[index] = datasets[index].copy(isDownloaded = false)
-                },
-                onOpenClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://data.wien.gv.at/"))
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    context.startActivity(intent)
-                }
-=======
-    val downloadStates = remember { mutableStateMapOf<String, DownloadState>().apply { 
-        allDatasets.forEach { put(it.id, it.initialState) }
-    } }
+    val downloadStates = remember {
+        mutableStateMapOf<String, DownloadState>().apply {
+            allDatasets.forEach { put(it.id, it.initialState) }
+        }
+    }
     val downloadProgress = remember { mutableStateMapOf<String, Float>() }
 
     val filteredDatasets = allDatasets.filter {
@@ -144,7 +85,7 @@ fun DownloadsScreen() {
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .background(Color(0xFFFBF8FF)) // Light lavender background like the image
+            .background(Color(0xFFFBF8FF))
     ) {
         Text(
             text = "Downloads",
@@ -166,7 +107,6 @@ fun DownloadsScreen() {
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
->>>>>>> 6849601 (Further refined download menu)
             )
         )
 
@@ -181,13 +121,11 @@ fun DownloadsScreen() {
             }
         }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(filteredDatasets) { dataset ->
                 val state = downloadStates[dataset.id] ?: DownloadState.NOT_DOWNLOADED
                 val progress = downloadProgress[dataset.id] ?: 0f
-                
+
                 SwipeableDatasetItem(
                     dataset = dataset,
                     state = state,
@@ -200,7 +138,7 @@ fun DownloadsScreen() {
                         downloadProgress.remove(dataset.id)
                     }
                 )
-                
+
                 if (state == DownloadState.DOWNLOADING) {
                     LaunchedEffect(dataset.id) {
                         var p = 0f
@@ -220,98 +158,16 @@ fun DownloadsScreen() {
 @Composable
 fun SwipeableDatasetItem(
     dataset: Dataset,
-<<<<<<< HEAD
-    isExpanded: Boolean,
-    onExpandClick: () -> Unit,
-    onDownloadClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onOpenClick: () -> Unit
-) {
-    Column {
-        ListItem(
-            modifier = Modifier.clickable { onExpandClick() },
-            headlineContent = { Text(dataset.name, fontWeight = FontWeight.SemiBold) },
-            supportingContent = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(dataset.description, modifier = Modifier.weight(1f))
-                    Text(dataset.size)
-                }
-            },
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Default.Stars,
-                    contentDescription = null,
-                    tint = if (dataset.isDownloaded) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            trailingContent = {
-                if (isExpanded) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (dataset.isDownloaded) {
-                            Box(
-                                modifier = Modifier
-                                    .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
-                                    .padding(8.dp)
-                                    .clickable { onOpenClick() }
-                            ) {
-                                Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = "Öffnen")
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                        }
-                        Box(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
-                                .padding(8.dp)
-                        ) {
-                            Icon(Icons.Default.StarBorder, contentDescription = "Lesezeichen")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Box(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
-                                .padding(8.dp)
-                        ) {
-                            Icon(Icons.Default.Share, contentDescription = "Teilen")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    if (dataset.isDownloaded) MaterialTheme.colorScheme.errorContainer
-                                    else MaterialTheme.colorScheme.primaryContainer,
-                                    CircleShape
-                                )
-                                .padding(8.dp)
-                                .clickable {
-                                    if (dataset.isDownloaded) onDeleteClick() else onDownloadClick()
-                                }
-                        ) {
-                            Icon(
-                                if (dataset.isDownloaded) Icons.Default.Delete else Icons.Default.FileDownload,
-                                contentDescription = if (dataset.isDownloaded) "Löschen" else "Herunterladen",
-                                tint = if (dataset.isDownloaded) MaterialTheme.colorScheme.onErrorContainer
-                                else MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        }
-                    }
-                } else {
-                    IconButton(onClick = { if (dataset.isDownloaded) onOpenClick() else onDownloadClick() }) {
-                        Icon(
-                            if (dataset.isDownloaded) Icons.AutoMirrored.Filled.OpenInNew else Icons.Default.FileDownload,
-                            contentDescription = if (dataset.isDownloaded) "Öffnen" else "Herunterladen"
-                        )
-                    }
-=======
     state: DownloadState,
     progress: Float,
     onDownload: () -> Unit,
     onDelete: () -> Unit
 ) {
+    val context = LocalContext.current
     var offsetX by remember { mutableStateOf(0f) }
     val menuWidth = 200.dp
     val menuWidthPx = with(LocalDensity.current) { menuWidth.toPx() }
-    
+
     val animatedOffset by animateIntOffsetAsState(
         targetValue = IntOffset(offsetX.roundToInt(), 0),
         label = "offset"
@@ -320,9 +176,8 @@ fun SwipeableDatasetItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFBF8FF)) // Match screen background
+            .background(Color(0xFFFBF8FF))
     ) {
-        // Menu content (Revealed on swipe)
         Row(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
@@ -337,12 +192,19 @@ fun SwipeableDatasetItem(
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(Icons.Default.StarBorder, contentDescription = "Favorite", modifier = Modifier.size(24.dp))
->>>>>>> 6849601 (Further refined download menu)
                 }
             }
             Spacer(modifier = Modifier.width(8.dp))
             Surface(
-                onClick = {},
+                onClick = {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, dataset.name)
+                        putExtra(Intent.EXTRA_TEXT, "${dataset.name}\n${dataset.description}\nhttps://data.wien.gv.at/")
+                    }
+                    context.startActivity(Intent.createChooser(intent, null))
+                    offsetX = 0f
+                },
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 modifier = Modifier.size(48.dp)
@@ -353,7 +215,7 @@ fun SwipeableDatasetItem(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Surface(
-                onClick = { 
+                onClick = {
                     onDelete()
                     offsetX = 0f
                 },
@@ -367,7 +229,6 @@ fun SwipeableDatasetItem(
             }
         }
 
-        // Main content
         Surface(
             modifier = Modifier
                 .offset { animatedOffset }
@@ -387,12 +248,8 @@ fun SwipeableDatasetItem(
             Column {
                 ListItem(
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                    headlineContent = { 
-                        Text(
-                            dataset.name, 
-                            fontWeight = FontWeight.Medium,
-                            style = MaterialTheme.typography.bodyLarge
-                        ) 
+                    headlineContent = {
+                        Text(dataset.name, fontWeight = FontWeight.Medium, style = MaterialTheme.typography.bodyLarge)
                     },
                     supportingContent = {
                         Text(
@@ -405,7 +262,7 @@ fun SwipeableDatasetItem(
                     },
                     leadingContent = {
                         Icon(
-                            imageVector = Icons.Default.Stars,
+                            imageVector = dataset.icon,
                             contentDescription = null,
                             modifier = Modifier.size(28.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
@@ -419,7 +276,6 @@ fun SwipeableDatasetItem(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            
                             when (state) {
                                 DownloadState.NOT_DOWNLOADED -> {
                                     IconButton(onClick = onDownload) {
@@ -434,10 +290,9 @@ fun SwipeableDatasetItem(
                                     )
                                 }
                                 DownloadState.DOWNLOADED -> {
-                                    // User requested: "Make the three dot menu into a trash bin for downloaded data sets"
                                     IconButton(onClick = onDelete) {
                                         Icon(
-                                            imageVector = Icons.Default.Delete, 
+                                            imageVector = Icons.Default.Delete,
                                             contentDescription = "Delete",
                                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -457,16 +312,6 @@ fun SwipeableDatasetItem(
     }
 }
 
-<<<<<<< HEAD
-data class Dataset(
-    val name: String,
-    val description: String,
-    val size: String,
-    val isDownloaded: Boolean = false
-)
-
-=======
->>>>>>> 6849601 (Further refined download menu)
 @Preview(showBackground = true)
 @Composable
 fun DownloadsScreenPreview() {
