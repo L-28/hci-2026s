@@ -95,9 +95,9 @@ enum class AppDestinations(
     val label: String,
     val icon: ImageVector,
 ) {
-    MAP("Map", Icons.Default.Map),
+    MAP("Karte", Icons.Default.Map),
     DOWNLOADS("Downloads", Icons.Default.Download),
-    SETTINGS("Settings", Icons.Default.Menu),
+    SETTINGS("Einstellungen", Icons.Default.Menu),
 }
 
 @Composable

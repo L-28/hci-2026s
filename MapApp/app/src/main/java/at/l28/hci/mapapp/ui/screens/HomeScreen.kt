@@ -21,7 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.URL
 import kotlinx.serialization.json.JsonObject
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
@@ -88,6 +91,23 @@ fun HomeScreen() {
         )
     )
 
+    val mapStyle by produceState<BaseStyle>(
+        initialValue = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty")
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                val styleJson = URL("https://tiles.openfreemap.org/styles/liberty").readText()
+                val localizedJson = styleJson
+                    .replace("\"name:en\"", "\"name:de\"")
+                    .replace("\"name_en\"", "\"name_de\"")
+                    .replace("{name}", "{name:de}")
+                value = BaseStyle.Json(localizedJson)
+            } catch (e: Exception) {
+                // Fallback to default
+            }
+        }
+    }
+
     val pins = remember {
         listOf(
             PinInfo("1", "Rathaus", "Wiener Rathaus, 1. Bezirk", Position(longitude = 16.35, latitude = 48.20)),
@@ -153,12 +173,13 @@ fun HomeScreen() {
             MaplibreMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraState = cameraState,
-                baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                baseStyle = mapStyle,
                 options = MapOptions(
                     ornamentOptions = OrnamentOptions(
                         isScaleBarEnabled = false, // Disable native scale bar to use custom one
                         logoAlignment = Alignment.BottomStart,
                         attributionAlignment = Alignment.BottomEnd,
+
                         padding = PaddingValues(bottom = ornamentPaddingBottom, start = 16.dp, end = 16.dp)
                     )
                 ),
