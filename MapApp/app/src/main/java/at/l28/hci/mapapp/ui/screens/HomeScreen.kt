@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Search
 import org.maplibre.compose.map.MaplibreMap
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.camera.CameraPosition
@@ -34,10 +35,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
+    val scope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded
     )
@@ -66,9 +69,15 @@ fun HomeScreen() {
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
-            SearchSheetContent()
+            SearchSheetContent(
+                onDismiss = {
+                    scope.launch {
+                        sheetState.hide()
+                    }
+                }
+            )
         },
-        sheetPeekHeight = 300.dp,
+        sheetPeekHeight = 125.dp,
         sheetContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f),
         sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) { innerPadding ->
@@ -130,7 +139,7 @@ fun MapPin(modifier: Modifier = Modifier, isSelected: Boolean = false) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchSheetContent() {
+fun SearchSheetContent(onDismiss: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +154,11 @@ fun SearchSheetContent() {
                     expanded = false,
                     onExpandedChange = {},
                     placeholder = { Text("Suchen") },
-                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) },
+                    leadingIcon = {
+                        IconButton(onClick = onDismiss) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        }
+                    },
                     trailingIcon = { Icon(Icons.Default.Mic, contentDescription = null) },
                 )
             },
