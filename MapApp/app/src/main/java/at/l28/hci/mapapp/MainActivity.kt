@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import at.l28.hci.mapapp.ui.theme.MapAppTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.isSystemInDarkTheme
+import at.l28.hci.mapapp.viewmodels.ThemeMode
 import at.l28.hci.mapapp.viewmodels.ThemeViewModel
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +38,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val themeViewModel: ThemeViewModel = viewModel()
-            MapAppTheme(darkTheme = themeViewModel.isDarkMode) {
+            val darkTheme = when (themeViewModel.themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+            MapAppTheme(darkTheme = darkTheme) {
                 MapAppApp(themeViewModel)
             }
         }
