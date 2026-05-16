@@ -5,9 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
@@ -17,10 +20,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Menu
 import at.l28.hci.mapapp.ui.screens.DownloadsScreen
 import at.l28.hci.mapapp.ui.screens.HomeScreen
 import at.l28.hci.mapapp.ui.screens.SettingsScreen
@@ -47,6 +46,7 @@ fun MapAppApp() {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.MAP) }
 
     NavigationSuiteScaffold(
+        modifier = Modifier.fillMaxSize(),
         navigationSuiteItems = {
             AppDestinations.entries.forEach {
                 item(
@@ -63,7 +63,11 @@ fun MapAppApp() {
             }
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+        ) {
             when (currentDestination) {
                 AppDestinations.MAP -> HomeScreen()
                 AppDestinations.DOWNLOADS -> DownloadsScreen()
