@@ -69,7 +69,7 @@ fun MapAppApp(themeViewModel: ThemeViewModel = viewModel()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .safeDrawingPadding()
+//                .safeDrawingPadding()
         ) {
             when (currentDestination) {
                 AppDestinations.MAP -> HomeScreen()
