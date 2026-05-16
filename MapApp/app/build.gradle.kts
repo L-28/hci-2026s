@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation("androidx.compose.material:material-icons-extended")
     implementation("org.maplibre.compose:maplibre-compose-android:0.12.1")
+    implementation("org.maplibre.compose:maplibre-compose-material3:0.12.1")
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)

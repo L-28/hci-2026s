@@ -30,6 +30,7 @@ import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
 import org.maplibre.compose.map.OrnamentOptions
+import org.maplibre.compose.material3.ScaleBar
 import org.maplibre.compose.sources.GeoJsonData
 import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.style.BaseStyle
@@ -39,6 +40,10 @@ import org.maplibre.spatialk.geojson.FeatureCollection
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 
 data class PinInfo(
     val id: String,
@@ -57,6 +62,24 @@ fun HomeScreen() {
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
     )
+
+    val density = LocalDensity.current
+    var containerSize by remember { mutableStateOf(IntSize.Zero) }
+    
+    val ornamentPaddingBottom by remember {
+        derivedStateOf {
+            val sheetTopOffset = try { sheetState.requireOffset() } catch (_: Exception) { 0f }
+            val sheetTopDp = with(density) { sheetTopOffset.toDp() }
+            val containerHeightDp = with(density) { containerSize.height.toDp() }
+            
+            // Padding from bottom of the Map container = ContainerHeight - SheetTop
+            val padding = if (containerHeightDp > 0.dp) {
+                (containerHeightDp - sheetTopDp).coerceAtLeast(0.dp)
+            } else 140.dp // Fallback to peek height
+
+            padding + 16.dp
+        }
+    }
 
     val cameraState = rememberCameraState(
         firstPosition = CameraPosition(
@@ -121,11 +144,11 @@ fun HomeScreen() {
         sheetPeekHeight = 125.dp,
         sheetContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f),
         sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
-    ) { innerPadding ->
+    ) { _ -> // Use _ to ignore innerPadding which was pushing map content up
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .onGloballyPositioned { containerSize = it.size }
         ) {
             MaplibreMap(
                 modifier = Modifier.fillMaxSize(),
@@ -133,9 +156,10 @@ fun HomeScreen() {
                 baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
                 options = MapOptions(
                     ornamentOptions = OrnamentOptions(
-                        isScaleBarEnabled = true,
-                        scaleBarAlignment = Alignment.BottomEnd,
-                        padding = PaddingValues(bottom = 140.dp, end = 16.dp)
+                        isScaleBarEnabled = false, // Disable native scale bar to use custom one
+                        logoAlignment = Alignment.BottomStart,
+                        attributionAlignment = Alignment.BottomEnd,
+                        padding = PaddingValues(bottom = ornamentPaddingBottom, start = 16.dp, end = 16.dp)
                     )
                 ),
                 onMapClick = { clickedPosition, _ ->
@@ -174,6 +198,14 @@ fun HomeScreen() {
                     iconAllowOverlap = const(true)
                 )
             }
+
+            // Custom Compose ScaleBar overlay
+            ScaleBar(
+                metersPerDp = cameraState.metersPerDpAtTarget,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = ornamentPaddingBottom + 24.dp, end = 16.dp)
+            )
 
             Box(
                 modifier = Modifier
