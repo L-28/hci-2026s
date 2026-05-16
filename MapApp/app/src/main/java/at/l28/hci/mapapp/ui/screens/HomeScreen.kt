@@ -164,8 +164,9 @@ fun SearchSheetContent(onDismiss: () -> Unit) {
             },
             expanded = false,
             onExpandedChange = {},
-            modifier = Modifier.fillMaxWidth()
-        ) {}
+            modifier = Modifier.fillMaxWidth(),
+            windowInsets = WindowInsets(0)
+        ) { }
 
         Spacer(modifier = Modifier.height(16.dp))
 
