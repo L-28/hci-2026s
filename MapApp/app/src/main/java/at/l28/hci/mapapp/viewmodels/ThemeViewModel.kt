@@ -13,11 +13,25 @@ class ThemeViewModel : ViewModel() {
     var themeMode by mutableStateOf(ThemeMode.SYSTEM)
         private set
 
+    var useLargeFont by mutableStateOf(false)
+        private set
+
+    var useHighContrast by mutableStateOf(false)
+        private set
+
     val isDarkMode: Boolean
         get() = themeMode == ThemeMode.DARK
 
     fun setTheme(mode: ThemeMode) {
         themeMode = mode
+    }
+
+    fun setLargeFont(enabled: Boolean) {
+        useLargeFont = enabled
+    }
+
+    fun setHighContrast(enabled: Boolean) {
+        useHighContrast = enabled
     }
 
     // Keep for backward compatibility if needed, but we'll use setTheme

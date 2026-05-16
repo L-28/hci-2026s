@@ -43,7 +43,11 @@ class MainActivity : ComponentActivity() {
                 ThemeMode.DARK -> true
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
             }
-            MapAppTheme(darkTheme = darkTheme) {
+            MapAppTheme(
+                darkTheme = darkTheme,
+                useHighContrast = themeViewModel.useHighContrast,
+                useLargeFont = themeViewModel.useLargeFont
+            ) {
                 MapAppApp(themeViewModel)
             }
         }

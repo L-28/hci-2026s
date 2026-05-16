@@ -27,7 +27,9 @@ import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.expressions.dsl.*
 import org.maplibre.compose.layers.SymbolLayer
+import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.OrnamentOptions
 import org.maplibre.compose.sources.GeoJsonData
 import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.style.BaseStyle
@@ -129,6 +131,13 @@ fun HomeScreen() {
                 modifier = Modifier.fillMaxSize(),
                 cameraState = cameraState,
                 baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                options = MapOptions(
+                    ornamentOptions = OrnamentOptions(
+                        isScaleBarEnabled = true,
+                        scaleBarAlignment = Alignment.BottomEnd,
+                        padding = PaddingValues(bottom = 140.dp, end = 16.dp)
+                    )
+                ),
                 onMapClick = { clickedPosition, _ ->
                     val nearest = pins.minByOrNull { pin ->
                         val dx = pin.position.longitude - clickedPosition.longitude

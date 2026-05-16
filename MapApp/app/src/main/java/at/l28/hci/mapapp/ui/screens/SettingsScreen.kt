@@ -6,13 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,26 +16,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import at.l28.hci.mapapp.viewmodels.BookmarksViewModel
-import at.l28.hci.mapapp.viewmodels.ThemeMode
-import at.l28.hci.mapapp.viewmodels.ThemeViewModel
+import at.l28.hci.mapapp.viewmodels.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     themeViewModel: ThemeViewModel = viewModel(),
-    bookmarksViewModel: BookmarksViewModel = viewModel()
+    bookmarksViewModel: BookmarksViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = viewModel(),
+    storageViewModel: StorageViewModel = viewModel()
 ) {
     var expandedItem by remember { mutableStateOf<String?>(null) }
 
     val settingsItems = listOf(
-        SettingItem("Profil", "Max Mustermann, 28 Jahre", Icons.Default.Settings),
+        SettingItem("Profil", "${profileViewModel.name}", Icons.Default.AccountCircle, isExpandable = true),
         SettingItem("Lesezeichen", "Gespicherte Orte und Routen", Icons.Default.BookmarkBorder, isExpandable = true),
-        SettingItem("Speicherverwaltung", "Offline-Karten (1.2 GB)", Icons.Default.FolderOpen),
+        SettingItem("Speicherverwaltung", "Offline-Karten (${storageViewModel.totalUsedSpace})", Icons.Default.FolderOpen, isExpandable = true),
         SettingItem("Darstellung", "Design und Farbschema anpassen", Icons.Default.LightMode, isExpandable = true),
-        SettingItem("Barrierefreiheit", "Schriftgröße und Kontrast", Icons.Default.Accessibility),
+        SettingItem("Barrierefreiheit", "Schriftgröße und Kontrast", Icons.Default.Accessibility, isExpandable = true),
         SettingItem("Über die App", "Versionsinfo und Entwickler", Icons.Default.Info, isExpandable = true),
-        SettingItem("Impressum", "Rechtliche Hinweise", Icons.Default.Description)
+        SettingItem("Impressum", "Rechtliche Hinweise", Icons.Default.Description, isExpandable = true)
     )
 
     LazyColumn(
@@ -74,9 +68,13 @@ fun SettingsScreen(
 
                 AnimatedVisibility(visible = isExpanded) {
                     when (item.title) {
+                        "Profil" -> ProfileSection(profileViewModel)
                         "Darstellung" -> ThemeSelection(themeViewModel)
                         "Lesezeichen" -> BookmarksSection(bookmarksViewModel)
+                        "Speicherverwaltung" -> StorageSection(storageViewModel)
+                        "Barrierefreiheit" -> AccessibilitySection(themeViewModel)
                         "Über die App" -> AboutSection()
+                        "Impressum" -> ImpressumSection()
                     }
                 }
             }
@@ -86,6 +84,129 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.outlineVariant
             )
         }
+    }
+}
+
+@Composable
+fun ProfileSection(profileViewModel: ProfileViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        OutlinedTextField(
+            value = profileViewModel.name,
+            onValueChange = { profileViewModel.name = it },
+            label = { Text("Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = profileViewModel.birthDate,
+            onValueChange = { profileViewModel.birthDate = it },
+            label = { Text("Geburtsdatum") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = profileViewModel.email,
+            onValueChange = { profileViewModel.email = it },
+            label = { Text("E-Mail") },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun StorageSection(storageViewModel: StorageViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text("Speicherplatz", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+        LinearProgressIndicator(
+            progress = { 0.15f },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Text(
+            "${storageViewModel.totalUsedSpace} von ${storageViewModel.totalAvailableSpace} verwendet",
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Offline-Karten", style = MaterialTheme.typography.titleSmall)
+        storageViewModel.offlineMaps.forEach { map ->
+            ListItem(
+                headlineContent = { Text(map.name) },
+                supportingContent = { Text(map.size) },
+                trailingContent = {
+                    IconButton(onClick = { storageViewModel.deleteMap(map) }) {
+                        Icon(Icons.Default.Delete, contentDescription = "Löschen")
+                    }
+                }
+            )
+        }
+        Button(
+            onClick = { /* Add more maps */ },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Karte hinzufügen")
+        }
+    }
+}
+
+@Composable
+fun AccessibilitySection(themeViewModel: ThemeViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Große Schrift")
+            Switch(
+                checked = themeViewModel.useLargeFont,
+                onCheckedChange = { themeViewModel.setLargeFont(it) }
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Hoher Kontrast")
+            Switch(
+                checked = themeViewModel.useHighContrast,
+                onCheckedChange = { themeViewModel.setHighContrast(it) }
+            )
+        }
+    }
+}
+
+@Composable
+fun ImpressumSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text("Impressum", style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n" +
+            "Herausgeber: L28-HCI Systems GmbH\n" +
+            "Adresse: Wiedner Hauptstraße 8-10, 1040 Wien\n" +
+            "E-Mail: contact@l28-hci.at",
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
