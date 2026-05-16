@@ -27,14 +27,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import at.l28.hci.mapapp.ui.theme.MapAppTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import at.l28.hci.mapapp.viewmodels.ThemeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MapAppTheme {
-                MapAppApp()
+            val themeViewModel: ThemeViewModel = viewModel()
+            MapAppTheme(darkTheme = themeViewModel.isDarkMode) {
+                MapAppApp(themeViewModel)
             }
         }
     }
@@ -42,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
 @PreviewScreenSizes
 @Composable
-fun MapAppApp() {
+fun MapAppApp(themeViewModel: ThemeViewModel = viewModel()) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.MAP) }
 
     NavigationSuiteScaffold(
@@ -71,7 +74,7 @@ fun MapAppApp() {
             when (currentDestination) {
                 AppDestinations.MAP -> HomeScreen()
                 AppDestinations.DOWNLOADS -> DownloadsScreen()
-                AppDestinations.SETTINGS -> SettingsScreen()
+                AppDestinations.SETTINGS -> SettingsScreen(themeViewModel)
             }
         }
     }
