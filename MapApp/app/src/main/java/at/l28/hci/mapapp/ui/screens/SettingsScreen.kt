@@ -22,17 +22,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import at.l28.hci.mapapp.viewmodels.BookmarksViewModel
 import at.l28.hci.mapapp.viewmodels.ThemeMode
 import at.l28.hci.mapapp.viewmodels.ThemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(themeViewModel: ThemeViewModel = viewModel()) {
+fun SettingsScreen(
+    themeViewModel: ThemeViewModel = viewModel(),
+    bookmarksViewModel: BookmarksViewModel = viewModel()
+) {
     var expandedItem by remember { mutableStateOf<String?>(null) }
 
     val settingsItems = listOf(
         SettingItem("Profil", "Max Mustermann, 28 Jahre", Icons.Default.Settings),
-        SettingItem("Lesezeichen", "Gespicherte Orte und Routen", Icons.Default.BookmarkBorder),
+        SettingItem("Lesezeichen", "Gespicherte Orte und Routen", Icons.Default.BookmarkBorder, isExpandable = true),
         SettingItem("Speicherverwaltung", "Offline-Karten (1.2 GB)", Icons.Default.FolderOpen),
         SettingItem("Darstellung", "Design und Farbschema anpassen", Icons.Default.LightMode, isExpandable = true),
         SettingItem("Barrierefreiheit", "Schriftgröße und Kontrast", Icons.Default.Accessibility),
@@ -71,6 +75,7 @@ fun SettingsScreen(themeViewModel: ThemeViewModel = viewModel()) {
                 AnimatedVisibility(visible = isExpanded) {
                     when (item.title) {
                         "Darstellung" -> ThemeSelection(themeViewModel)
+                        "Lesezeichen" -> BookmarksSection(bookmarksViewModel)
                         "Über die App" -> AboutSection()
                     }
                 }
@@ -110,6 +115,37 @@ fun ThemeSelection(themeViewModel: ThemeViewModel) {
                 ) {
                     Text(label)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun BookmarksSection(bookmarksViewModel: BookmarksViewModel) {
+    val bookmarks = bookmarksViewModel.bookmarks
+    Column(modifier = Modifier.fillMaxWidth()) {
+        if (bookmarks.isEmpty()) {
+            Text(
+                "Keine Lesezeichen vorhanden",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        } else {
+            bookmarks.forEach { dataset ->
+                ListItem(
+                    headlineContent = { Text(dataset.name) },
+                    supportingContent = { Text(dataset.category) },
+                    leadingContent = {
+                        Icon(dataset.icon, contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary)
+                    }
+                )
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
             }
         }
     }

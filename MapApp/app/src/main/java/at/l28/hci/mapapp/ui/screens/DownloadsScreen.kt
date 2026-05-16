@@ -1,7 +1,9 @@
 package at.l28.hci.mapapp.ui.screens
 
 import android.content.Intent
-import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import at.l28.hci.mapapp.viewmodels.BookmarksViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -47,7 +49,7 @@ data class Dataset(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DownloadsScreen() {
+fun DownloadsScreen(bookmarksViewModel: BookmarksViewModel = viewModel()) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -130,6 +132,8 @@ fun DownloadsScreen() {
                     dataset = dataset,
                     state = state,
                     progress = progress,
+                    isBookmarked = bookmarksViewModel.isBookmarked(dataset.id),
+                    onBookmark = { bookmarksViewModel.toggle(dataset) },
                     onDownload = {
                         downloadStates[dataset.id] = DownloadState.DOWNLOADING
                     },
@@ -160,6 +164,8 @@ fun SwipeableDatasetItem(
     dataset: Dataset,
     state: DownloadState,
     progress: Float,
+    isBookmarked: Boolean = false,
+    onBookmark: () -> Unit = {},
     onDownload: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -168,8 +174,8 @@ fun SwipeableDatasetItem(
     val menuWidth = 200.dp
     val menuWidthPx = with(LocalDensity.current) { menuWidth.toPx() }
 
-    val animatedOffset by animateIntOffsetAsState(
-        targetValue = IntOffset(offsetX.roundToInt(), 0),
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = offsetX,
         label = "offset"
     )
 
@@ -185,13 +191,20 @@ fun SwipeableDatasetItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                onClick = {},
+                onClick = { onBookmark(); offsetX = 0f },
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                color = if (isBookmarked) MaterialTheme.colorScheme.primaryContainer
+                        else MaterialTheme.colorScheme.secondaryContainer,
                 modifier = Modifier.size(48.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Icon(Icons.Default.StarBorder, contentDescription = "Favorite", modifier = Modifier.size(24.dp))
+                    Icon(
+                        if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                        contentDescription = "Lesezeichen",
+                        modifier = Modifier.size(24.dp),
+                        tint = if (isBookmarked) MaterialTheme.colorScheme.primary
+                               else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -231,7 +244,7 @@ fun SwipeableDatasetItem(
 
         Surface(
             modifier = Modifier
-                .offset { animatedOffset }
+                .offset { IntOffset(animatedOffsetX.roundToInt(), 0) }
                 .draggable(
                     state = rememberDraggableState { delta ->
                         val newOffset = (offsetX + delta).coerceIn(-menuWidthPx, 0f)
