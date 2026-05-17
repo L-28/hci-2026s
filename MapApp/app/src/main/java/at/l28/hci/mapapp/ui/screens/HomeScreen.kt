@@ -279,7 +279,7 @@ fun HomeScreen(
                         value = pinPainter,
                         drawAsSdf = true
                     ),
-                    iconColor = get { get("color") },
+                    iconColor = feature.get("color").convertToColor(),
                     iconSize = const(1.5f),
                     iconAllowOverlap = const(true)
                 )
