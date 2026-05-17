@@ -201,9 +201,9 @@ fun ImpressumSection() {
         Text("Impressum", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            "Herausgeber: L28-HCI Systems GmbH\n" +
+            "Herausgeber: MapApp 307 GmbH \n" +
             "Adresse: Wiedner Hauptstraße 8-10, 1040 Wien\n" +
-            "E-Mail: contact@l28-hci.at",
+            "E-Mail: contact@mappapp307.at",
             style = MaterialTheme.typography.bodyMedium
         )
     }
@@ -286,12 +286,12 @@ fun AboutSection() {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Entwickelt von L28-HCI Systems in Wien. Unser Ziel ist es, die Navigation im urbanen Raum so intuitiv wie möglich zu gestalten.",
+            text = "Entwickelt von MapApp 307 GmbH in Wien. Unser Ziel ist es, die Navigation im urbanen Raum so intuitiv wie möglich zu gestalten.",
             style = MaterialTheme.typography.bodyMedium
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "© 2026 L28-HCI Systems. Alle Rechte vorbehalten.",
+            text = "© 2026 MapApp 307 GmbH. Alle Rechte vorbehalten.",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
