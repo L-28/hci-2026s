@@ -14,15 +14,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +33,6 @@ import at.l28.hci.mapapp.models.Dataset
 import at.l28.hci.mapapp.models.DownloadState
 import kotlin.math.roundToInt
 
-import at.l28.hci.mapapp.models.PinInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -49,7 +45,7 @@ fun DownloadsScreen(
     onNavigateToPin: (String) -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     val allDatasets = remember { DataProvider.allDatasets }
 
@@ -166,7 +162,7 @@ fun SwipeableDatasetItem(
     onNavigateToPin: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
-    var offsetX by remember { mutableStateOf(0f) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
     val menuWidth = 200.dp
     val menuWidthPx = with(LocalDensity.current) { menuWidth.toPx() }
 

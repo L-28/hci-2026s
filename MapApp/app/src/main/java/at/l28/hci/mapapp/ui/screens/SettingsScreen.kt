@@ -29,7 +29,7 @@ fun SettingsScreen(
     var expandedItem by remember { mutableStateOf<String?>(null) }
 
     val settingsItems = listOf(
-        SettingItem("Profil", "${profileViewModel.name}", Icons.Default.AccountCircle, isExpandable = true),
+        SettingItem("Profil", profileViewModel.name, Icons.Default.AccountCircle, isExpandable = true),
         SettingItem("Lesezeichen", "Gespicherte Orte und Routen", Icons.Default.BookmarkBorder, isExpandable = true),
         SettingItem("Speicherverwaltung", "Offline-Karten (${storageViewModel.totalUsedSpace})", Icons.Default.FolderOpen, isExpandable = true),
         SettingItem("Darstellung", "Design und Farbschema anpassen", Icons.Default.LightMode, isExpandable = true),

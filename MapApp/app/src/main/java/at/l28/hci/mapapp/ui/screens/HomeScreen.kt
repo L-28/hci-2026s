@@ -1,26 +1,22 @@
 package at.l28.hci.mapapp.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.AccountTree
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,7 +28,6 @@ import kotlinx.serialization.json.JsonObject
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.expressions.dsl.*
-import org.maplibre.compose.expressions.value.ExpressionValue
 import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
@@ -48,7 +43,6 @@ import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import kotlinx.serialization.json.JsonPrimitive
@@ -195,7 +189,7 @@ fun HomeScreen(
                                 selectedPin = null
                                 onNavigateToDownloads()
                             }) {
-                                Icon(Icons.Default.ArrowForward, contentDescription = "Datensatz anzeigen")
+                                Icon(  Icons.AutoMirrored.Default.ArrowForward, contentDescription = "Datensatz anzeigen")
                             }
                         }
                     }
@@ -298,7 +292,7 @@ fun HomeScreen(
                         value = pinPainter,
                         drawAsSdf = true
                     ),
-                    iconColor = feature.get("color").convertToColor(),
+                    iconColor = feature["color"].convertToColor(),
                     iconSize = const(1.5f),
                     iconAllowOverlap = const(true)
                 )
