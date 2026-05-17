@@ -8,16 +8,13 @@
 
 Framework: [Android]
 
-API-Version: [Android API-Level 27-30]
+API-Version: [Android API-Level 35-36]
 
 GerÃ¤t(e), auf dem(denen) getestet wurde:
-[Pixel2, iPhone 8 etc.]
+[Pixel 9]
 
 Externe Libraries und Frameworks:
 [Kotlin, Jetpack Compose, MapLibre Compose, MapLibre Compose Material 3, SpatialK GeoJSON, Material Design 3, Material 3 Adaptive Navigation Suite, Material Icons Extended, AndroidX Activity Compose, AndroidX Lifecycle, AndroidX Core KTX]
 
 Dauer der Entwicklung:
-[XX Stunden]
-
-Weitere Anmerkungen:
-[...]
+[10 Stunden]
