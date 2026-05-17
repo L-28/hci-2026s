@@ -64,7 +64,8 @@ fun HomeScreen(
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(
-        initialValue = SheetValue.PartiallyExpanded
+        initialValue = SheetValue.PartiallyExpanded,
+        skipHiddenState = false
     )
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
