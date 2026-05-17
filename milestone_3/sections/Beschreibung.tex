@@ -1,3 +1,72 @@
-\section{Beschreibung des Prototyp}
-%
-\lipsum[1-2]
+\section{Beschreibung des Prototyps}
+
+Der entwickelte High-Fidelity-Prototyp ist eine native Android-Applikation, die Open-Data-Datensätze der Stadt Wien auf einer interaktiven Karte zugänglich macht.
+Die App ist in drei Hauptbereiche gegliedert, die über eine persistente Bottom-Navigation am unteren Bildschirmrand erreichbar sind: \textit{Karte}, \textit{Downloads} und \textit{Einstellungen}.
+
+\subsection{Kartenansicht}
+
+Der Startbildschirm zeigt eine interaktive Karte des Stadtgebiets Wien (Abbildung~\ref{fig:karte}).
+Als Kartentechnologie wird MapLibre GL in Kombination mit dem öffentlichen Kartenstil von OpenFreeMap verwendet, auf Deutsche Bezeichnungen lokalisiert.
+Auf der Karte sind 58 Pins eingezeichnet, die Points of Interest aus verschiedenen Datensätzen repräsentieren und nach Kategorie eingefärbt sind:
+Kulturobjekte in Orange, Verkehrsdaten in Blau, Umweltdaten in Grün, Infrastruktur in Lila und Basiskartendaten in Grau.
+
+Am unteren Rand befindet sich ein ausfahrbares Such-Bottom-Sheet mit Suchfeld, früheren Suchanfragen und Vorschlägen.
+Durch Antippen eines Pins öffnet sich ein modales Bottom-Sheet mit Name, Beschreibung und dem zugehörigen Datensatz als verknüpfte Karte (Abbildung~\ref{fig:karte}, rechts).
+Ein Pfeil-Button navigiert direkt zum entsprechenden Eintrag im Downloads-Screen.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.44\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{StartScreen}
+        \small Startbildschirm mit Kartenansicht
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.44\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Kartenselektion}
+        \small Pin-Detailansicht (\enquote{Westbahnhof WiFi})
+    \end{minipage}
+    \caption{Kartenansicht: Übersicht (links) und Pin-Selektion mit Datensatz-Verlinkung (rechts)}
+    \label{fig:karte}
+\end{figure}
+
+\subsection{Downloads-Screen}
+
+Der Downloads-Screen listet alle verfügbaren Datensätze mit Name, Beschreibung, Dateigröße und Downloadstatus (Abbildung~\ref{fig:downloads}).
+Ein Suchfeld erlaubt das Filtern nach Name oder Kategorie.
+Zwei Tabs -- \textit{Entdecken} und \textit{Installiert} -- trennen verfügbare von bereits gespeicherten Datensätzen.
+Das Herunterladen wird durch einen animierten Kreisfortschrittsbalken visualisiert.
+
+Installierte Datensätze können per Wischgeste nach links aufgeklappt werden, wodurch drei Aktionsbuttons erscheinen: Lesezeichen, Teilen (Android-Share-Sheet) und Löschen (Abbildung~\ref{fig:downloads_detail}).
+Durch Antippen eines installierten Datensatzes klappt eine Pinliste auf; ein Klick auf einen Pin wechselt zur Karte und zoomt animiert auf den Ort.
+
+\subsection{Einstellungen-Screen}
+
+Der Einstellungen-Screen (Abbildung~\ref{fig:downloads}, rechts) bietet aufklappbare Konfigurationsbereiche:
+Profil (Name, Geburtsdatum, E-Mail), Lesezeichen (gespeicherte Datensätze), Speicherverwaltung (Offline-Karten mit Fortschrittsanzeige),
+Darstellung (Hell/Dunkel/System-Theme), Barrierefreiheit (große Schrift, hoher Kontrast) sowie Versionsinformation und Impressum.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.44\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Download_Verzeichniss}
+        \small Downloads-Screen: Datensatzübersicht
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.44\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Einstellungen}
+        \small Einstellungen-Screen
+    \end{minipage}
+    \caption{Downloads-Screen (links) und Einstellungen-Screen (rechts)}
+    \label{fig:downloads}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Download_Verzeichniss_Loeschen_Detailansicht}
+    \caption{Swipe-Aktionen (Lesezeichen, Teilen, Löschen) und aufgeklappte Pinliste eines installierten Datensatzes}
+    \label{fig:downloads_detail}
+\end{figure}

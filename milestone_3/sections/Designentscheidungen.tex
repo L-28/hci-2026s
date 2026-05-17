@@ -1,3 +1,125 @@
 \section{Designentscheidungen}
-%
-\lipsum[1-2]
+
+Bei der Umsetzung des High-Fidelity-Prototyps wurden mehrere zentrale Designentscheidungen getroffen.
+Diese werden im Folgenden ausführlich begründet und in Bezug auf die Nutzer- und Aufgabenanalyse aus Meilenstein~1
+sowie auf die dort durchgeführte Konkurrenzanalyse gesetzt.
+
+\subsection{Karte als primäre Interaktionsoberfläche}
+
+Die grundlegendste Designentscheidung des Projekts war die Wahl der Karte als zentrales Interface-Element.
+Statt einer Listen- oder Dashboard-Ansicht steht beim Start der App sofort eine interaktive Karte Wiens im Vordergrund.
+
+Diese Entscheidung leitet sich direkt aus der Kontextanalyse in M1 ab:
+Die App wird primär mobil und \textit{unterwegs} verwendet -- in öffentlichen Verkehrsmitteln, auf dem Weg zu einem Ort, oder spontan in einer Pause.
+In diesem Nutzungskontext hat eine Karte einen entscheidenden Vorteil gegenüber einer abstrakten Liste:
+Sie verankert Datenpunkte räumlich und erlaubt Nutzer:innen, sofort einen Bezug zur eigenen Umgebung herzustellen.
+Das entspricht dem HCI-Prinzip der \textit{direkten Manipulation} -- Nutzer:innen interagieren nicht mit abstrahierten Daten,
+sondern mit ihrer tatsächlichen Stadt.
+
+Aus der Konkurrenzanalyse (M1) ging hervor, dass mobile Open-Data-Anwendungen für Wien im App-Markt kaum vertreten sind.
+Webbasierte Angebote wie \textit{Winterthur in Zahlen} oder der \textit{OECD Data Explorer} bieten zwar Kartenansichten,
+sind aber nicht auf mobile, kontextbezogene Nutzung ausgelegt.
+Die konsequente Kartenzentrierung füllt diese Lücke.
+
+\subsection{Farbcodierung der Kartenmarkierungen nach Kategorie}
+
+Auf der Karte sind 58 Pins in fünf Farben eingeteilt: Orange (Kultur), Blau (Verkehr), Grün (Umwelt),
+Lila (Infrastruktur) und Grau (Basiskarte).
+Ohne diese Unterscheidung wäre die Karte bei dieser Datendichte schwer lesbar -- alle Pins würden gleich aussehen
+und Nutzer:innen müssten jeden einzelnen antippen, um seine Kategorie zu erfahren.
+
+Die Farbcodierung folgt dem Gestalt-Prinzip der \textit{Ähnlichkeit}:
+Elemente gleicher Farbe werden als zusammengehörig wahrgenommen, ohne dass eine Legende aktiv gelesen werden muss.
+Damit wird die in der Aufgabenanalyse (M1) als wichtig eingestufte Aufgabe \enquote{Einträge kategorisieren} auf die
+Kartenebene übertragen -- Kategorisierung geschieht passiv und automatisch durch die visuelle Wahrnehmung.
+
+Für Gelegenheitsnutzer:innen (Persona \textit{Luca Kunze}) ist dieser Ansatz besonders wichtig:
+Sie haben laut M1 kein vertieftes Interesse an Daten und wollen ohne Vorkenntnisse schnell an Informationen gelangen.
+Die intuitive Farbkodierung senkt die Einstiegshürde erheblich.
+Gleichzeitig befriedigt sie technikaffine Studierende (Persona \textit{Benjamin Eberhart}),
+die auf einen Blick die räumliche Verteilung bestimmter Datensatzkategorien erfassen wollen.
+
+\subsection{Such-Bottom-Sheet statt separatem Such-Screen}
+
+Die Suchfunktion ist als ausfahrbares Bottom-Sheet unterhalb der Karte realisiert -- nicht als eigener Screen mit
+Navigation und Zurück-Button.
+Im zugeklappten Zustand ist das Suchfeld dauerhaft sichtbar; beim Tippen fährt das Sheet auf und zeigt
+frühere Suchanfragen oder Vorschläge.
+
+Der Kernvorteil dieses Ansatzes liegt in der \textit{kontinuierlichen Kontextwahrnehmung}:
+Die Karte bleibt im Hintergrund sichtbar und die Kamera animiert sich beim Auswählen eines Suchergebnisses direkt
+auf den gefundenen Ort. Nutzer:innen sehen sofort, \textit{wo} sich das Ergebnis befindet.
+Ein separater Such-Screen hätte diesen räumlichen Kontext unterbrochen.
+
+Dieses Muster folgt etablierten Designkonventionen von Google Maps und Apple Maps und reduziert den kognitiven Aufwand,
+der durch Bildschirmwechsel entsteht (\textit{Hick's Law}: je weniger Entscheidungsschritte,
+desto schneller die Aufgabenerledigung).
+Es adressiert die in M1 beschriebene Anforderung an \textit{schnelle, effiziente Navigation} bei kurzen Nutzungssessions.
+
+\subsection{Verbindung zwischen Karte und Downloads-Screen}
+
+Eine wichtige Interaktionsentscheidung ist die bidirektionale Verlinkung zwischen Kartenansicht und Downloads-Screen:
+Wird auf der Karte ein Pin angetippt, zeigt das Detail-Modal den zugehörigen Datensatz mit einem Weiterleitungs-Button.
+Umgekehrt können Nutzer:innen aus der Pinliste eines installierten Datensatzes direkt auf die Karte navigieren,
+wobei die Kamera automatisch auf den gewählten Ort zoomt.
+
+Diese Entscheidung spiegelt die Erkenntnis aus der Aufgabenanalyse (M1) wider,
+dass Nutzer:innen unterschiedliche \textit{Einstiegspunkte} in die App haben:
+Manche beginnen explorativ auf der Karte und wollen dann mehr über einen Datensatz erfahren;
+andere beginnen im Downloads-Screen und wollen einen bestimmten Ort auf der Karte verorten.
+Beide Wege müssen ohne Reibungsverluste möglich sein.
+
+\subsection{Swipe-to-reveal für sekundäre Aktionen im Downloads-Screen}
+
+Die drei Aktionen Lesezeichen setzen, Teilen und Löschen sind nicht als dauerhaft sichtbare Buttons implementiert,
+sondern werden durch eine horizontale Wischgeste nach links freigelegt.
+
+Diese Entscheidung basiert auf zwei Überlegungen:
+Erstens verhindert sie \textit{visuelle Überladung} der Listeneinträge.
+Jeder Datensatz zeigt nur Name, Beschreibung, Größe und Downloadstatus -- die Hauptinformation.
+Sekundäre Aktionen bleiben verborgen und stören die Übersichtlichkeit nicht.
+Zweitens schützt das Muster vor \textit{versehentlichen Aktionen}:
+Das Löschen eines heruntergeladenen Datensatzes erfordert eine bewusste Wischbewegung und dann einen zusätzlichen Tap --
+nicht-intendierte Löschvorgänge werden dadurch vermieden.
+
+Das Swipe-Muster ist ein auf Android und iOS weit verbreitetes Interaktionsmuster
+(z.\,B. E-Mail-Clients, Aufgaben-Apps) und entspricht daher dem HCI-Prinzip der
+\textit{Konsistenz mit Nutzererwartungen}.
+Berufliche Nutzer:innen wie \textit{Ralph Ebersbach} aus M1 können so effizient zwischen Entdecken und Verwalten wechseln.
+
+\subsection{Tab-Trennung in \enquote{Entdecken} und \enquote{Installiert}}
+
+Der Downloads-Screen unterscheidet explizit zwischen verfügbaren und bereits installierten Datensätzen.
+Diese Trennung adressiert zwei konzeptuell verschiedene Nutzungsszenarien, die in der Aufgabenanalyse (M1) identifiziert wurden:
+
+\textit{Erkunden und Entdecken} (häufig bei Content-Creator-Persona \textit{Leah Reiniger} und Student \textit{Benjamin Eberhart}):
+Hier ist eine vollständige, übersichtliche Liste aller verfügbaren Datensätze gewünscht -- ohne Rauschen durch bereits bekannte Einträge.
+\textit{Verwalten und Wiederverwenden} (häufig bei Persona \textit{Ralph Ebersbach}):
+Hier werden nur installierte Datensätze benötigt, die für wiederkehrende Aufgaben bereitstehen.
+
+Ohne diese Trennung würde die Liste mit zunehmender Anzahl installierter Datensätze schwerer navigierbar.
+Die Tab-Struktur hält beide Ansichten sauber und fokussiert.
+
+\subsection{Offline-Verfügbarkeit als Kernfunktion}
+
+Die Möglichkeit, Datensätze lokal herunterzuladen, ist keine optionale Erweiterung, sondern ein zentrales Feature der App.
+Diese Entscheidung ergibt sich unmittelbar aus der Kontextanalyse in M1:
+Die primäre Nutzungssituation ist mobil -- in der U-Bahn, auf dem Fahrrad, in Grünflächen -- und damit oft mit
+instabiler oder fehlender Internetverbindung verbunden.
+
+Die in M1 als potenzielles Problem identifizierten \enquote{langen Ladezeiten bei schwacher Verbindung}
+werden durch Offline-Karten strukturell gelöst: Einmal heruntergeladen, funktionieren alle Pins und zugehörigen
+Informationen vollständig ohne Netzanbindung.
+Dies ist ein Beispiel für \textit{proaktives Fehlermanagement} im Sinne von Nielsens Heuristiken --
+das Problem wird verhindert, bevor es entsteht, anstatt nach dem Auftreten behandelt zu werden.
+
+\subsection{Barrierefreiheit und Darstellungsanpassung}
+
+Unter \enquote{Einstellungen} bietet die App explizite Optionen für große Schrift, hohen Kontrast sowie
+die Wahl zwischen hellem, dunklem und systemfolgendem Farbschema.
+
+Die Entscheidung, Barrierefreiheit als dedizierte Einstellungskategorie zu gestalten und nicht nur auf
+Betriebssystemebene zu delegieren, folgt aus der Diversität der identifizierten Nutzergruppen (M1):
+Von technikaffinen Studierenden bis zu Gelegenheitsnutzer:innen unterschiedlicher Altersgruppen
+nutzen die App sehr verschiedene Personen mit unterschiedlichen Anforderungen an Lesbarkeit und Kontrast.
+Durch die In-App-Einstellung bleibt die Anpassung direkt erreichbar, ohne die Systemeinstellungen verlassen zu müssen.
