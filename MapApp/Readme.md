@@ -1,20 +1,20 @@
 ## Readme - M3
 
-- Gruppe: [1,2,3,4]
-- Team-Nr.:
-- Projektthema:
+- Gruppe: 3
+- Team-Nr.: 7
+- Projektthema: Open Data
 
 ### Implementierung
 
-Framework: [Android | React Native iOS | React Native Android]
+Framework: [Android]
 
-API-Version: [Android API-Level 27-30 | iOS 14 â€¦ ]
+API-Version: [Android API-Level 27-30]
 
 GerÃ¤t(e), auf dem(denen) getestet wurde:
 [Pixel2, iPhone 8 etc.]
 
 Externe Libraries und Frameworks:
-[...]
+[Kotlin, Jetpack Compose, MapLibre Compose, MapLibre Compose Material 3, SpatialK GeoJSON, Material Design 3, Material 3 Adaptive Navigation Suite, Material Icons Extended, AndroidX Activity Compose, AndroidX Lifecycle, AndroidX Core KTX]
 
 Dauer der Entwicklung:
 [XX Stunden]
