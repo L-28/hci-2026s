@@ -10,10 +10,10 @@ Die grundlegendste Designentscheidung des Projekts war die Wahl der Karte als ze
 Statt einer Listen- oder Dashboard-Ansicht steht beim Start der App sofort eine interaktive Karte Wiens im Vordergrund.
 
 Diese Entscheidung leitet sich direkt aus der Kontextanalyse in M1 ab:
-Die App wird primär mobil und \textit{unterwegs} verwendet -- in öffentlichen Verkehrsmitteln, auf dem Weg zu einem Ort, oder spontan in einer Pause.
+Die App wird primär mobil und \textit{unterwegs} verwendet, in öffentlichen Verkehrsmitteln, auf dem Weg zu einem Ort, oder spontan in einer Pause.
 In diesem Nutzungskontext hat eine Karte einen entscheidenden Vorteil gegenüber einer abstrakten Liste:
-Sie verankert Datenpunkte räumlich und erlaubt Nutzer:innen, sofort einen Bezug zur eigenen Umgebung herzustellen.
-Das entspricht dem HCI-Prinzip der \textit{direkten Manipulation} -- Nutzer:innen interagieren nicht mit abstrahierten Daten,
+Sie visualisiert Datenpunkte räumlich und erlaubt Nutzer:innen, sofort einen Bezug zur eigenen Umgebung herzustellen.
+Das entspricht dem HCI-Prinzip der \textit{direkten Manipulation}: Nutzer:innen interagieren nicht mit abstrahierten Daten,
 sondern mit ihrer tatsächlichen Stadt.
 
 Aus der Konkurrenzanalyse (M1) ging hervor, dass mobile Open-Data-Anwendungen für Wien im App-Markt kaum vertreten sind.
@@ -21,17 +21,19 @@ Webbasierte Angebote wie \textit{Winterthur in Zahlen} oder der \textit{OECD Dat
 sind aber nicht auf mobile, kontextbezogene Nutzung ausgelegt.
 Die konsequente Kartenzentrierung füllt diese Lücke.
 
+Zudem hat diese Version unserer Low-fidelity Prototypen bei den Evaluierungen, sowie bei der Präsentation am meisten Anhang gefunden.
+
 \subsection{Farbcodierung der Kartenmarkierungen nach Kategorie}
 
-Auf der Karte sind 58 Pins in fünf Farben eingeteilt: Orange (Kultur), Blau (Verkehr), Grün (Umwelt),
+Auf der Karte sind Pins in fünf Farben eingeteilt: Orange (Kultur), Blau (Verkehr), Grün (Umwelt),
 Lila (Infrastruktur) und Grau (Basiskarte).
-Ohne diese Unterscheidung wäre die Karte bei dieser Datendichte schwer lesbar -- alle Pins würden gleich aussehen
+Ohne diese Unterscheidung wäre die Karte bei dieser Datendichte schwer lesbar. Alle Pins würden gleich aussehen
 und Nutzer:innen müssten jeden einzelnen antippen, um seine Kategorie zu erfahren.
 
 Die Farbcodierung folgt dem Gestalt-Prinzip der \textit{Ähnlichkeit}:
 Elemente gleicher Farbe werden als zusammengehörig wahrgenommen, ohne dass eine Legende aktiv gelesen werden muss.
 Damit wird die in der Aufgabenanalyse (M1) als wichtig eingestufte Aufgabe \enquote{Einträge kategorisieren} auf die
-Kartenebene übertragen -- Kategorisierung geschieht passiv und automatisch durch die visuelle Wahrnehmung.
+Kartenebene übertragen. Die Kategorisierung geschieht passiv und automatisch durch die visuelle Wahrnehmung.
 
 Für Gelegenheitsnutzer:innen (Persona \textit{Luca Kunze}) ist dieser Ansatz besonders wichtig:
 Sie haben laut M1 kein vertieftes Interesse an Daten und wollen ohne Vorkenntnisse schnell an Informationen gelangen.
@@ -41,12 +43,12 @@ die auf einen Blick die räumliche Verteilung bestimmter Datensatzkategorien erf
 
 \subsection{Such-Bottom-Sheet statt separatem Such-Screen}
 
-Die Suchfunktion ist als ausfahrbares Bottom-Sheet unterhalb der Karte realisiert -- nicht als eigener Screen mit
+Die Suchfunktion ist als ausfahrbares Bottom-Sheet unterhalb der Karte realisiert und nicht als eigener Screen mit
 Navigation und Zurück-Button.
-Im zugeklappten Zustand ist das Suchfeld dauerhaft sichtbar; beim Tippen fährt das Sheet auf und zeigt
+Im zugeklappten Zustand ist das Suchfeld dauerhaft sichtbar. Wenn man Tippt fährt das Sheet auf und zeigt
 frühere Suchanfragen oder Vorschläge.
 
-Der Kernvorteil dieses Ansatzes liegt in der \textit{kontinuierlichen Kontextwahrnehmung}:
+Der Vorteil dieses Ansatzes liegt in der \textit{kontinuierlichen Kontextwahrnehmung}:
 Die Karte bleibt im Hintergrund sichtbar und die Kamera animiert sich beim Auswählen eines Suchergebnisses direkt
 auf den gefundenen Ort. Nutzer:innen sehen sofort, \textit{wo} sich das Ergebnis befindet.
 Ein separater Such-Screen hätte diesen räumlichen Kontext unterbrochen.
@@ -65,8 +67,8 @@ wobei die Kamera automatisch auf den gewählten Ort zoomt.
 
 Diese Entscheidung spiegelt die Erkenntnis aus der Aufgabenanalyse (M1) wider,
 dass Nutzer:innen unterschiedliche \textit{Einstiegspunkte} in die App haben:
-Manche beginnen explorativ auf der Karte und wollen dann mehr über einen Datensatz erfahren;
-andere beginnen im Downloads-Screen und wollen einen bestimmten Ort auf der Karte verorten.
+Manche Nutzer suchen auf der Karte und wollen dann mehr über einen Datensatz erfahren.
+Andere beginnen im Downloads-Screen und wollen einen bestimmten Ort auf der Karte erkunden.
 Beide Wege müssen ohne Reibungsverluste möglich sein.
 
 \subsection{Swipe-to-reveal für sekundäre Aktionen im Downloads-Screen}
@@ -76,11 +78,10 @@ sondern werden durch eine horizontale Wischgeste nach links freigelegt.
 
 Diese Entscheidung basiert auf zwei Überlegungen:
 Erstens verhindert sie \textit{visuelle Überladung} der Listeneinträge.
-Jeder Datensatz zeigt nur Name, Beschreibung, Größe und Downloadstatus -- die Hauptinformation.
+Jeder Datensatz zeigt nur die Hauptinformationen: Name, Beschreibung, Größe und Downloadstatus.
 Sekundäre Aktionen bleiben verborgen und stören die Übersichtlichkeit nicht.
 Zweitens schützt das Muster vor \textit{versehentlichen Aktionen}:
-Das Löschen eines heruntergeladenen Datensatzes erfordert eine bewusste Wischbewegung und dann einen zusätzlichen Tap --
-nicht-intendierte Löschvorgänge werden dadurch vermieden.
+Das Löschen eines heruntergeladenen Datensatzes erfordert eine bewusste Wischbewegung und dann einen zusätzlichen Tap damit wird beunabsichtiges Löschen vermieden.
 
 Das Swipe-Muster ist ein auf Android und iOS weit verbreitetes Interaktionsmuster
 (z.\,B. E-Mail-Clients, Aufgaben-Apps) und entspricht daher dem HCI-Prinzip der
