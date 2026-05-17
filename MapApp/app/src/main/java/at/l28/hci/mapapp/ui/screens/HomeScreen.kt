@@ -9,10 +9,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountTree
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -47,17 +49,16 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-
-data class PinInfo(
-    val id: String,
-    val name: String,
-    val description: String,
-    val position: Position
-)
+import at.l28.hci.mapapp.data.DataProvider
+import at.l28.hci.mapapp.models.PinInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    initialPinId: String? = null,
+    onNavigateToDownloads: () -> Unit = {},
+    onPinNavigated: () -> Unit = {}
+) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded
@@ -108,66 +109,25 @@ fun HomeScreen() {
         }
     }
 
-    val pins = remember {
-        listOf(
-            PinInfo("1", "Stephansdom", "Wahrzeichen Wiens, 1. Bezirk", Position(16.3731, 48.2085)),
-            PinInfo("2", "Rathaus", "Wiener Rathaus, 1. Bezirk", Position(16.3589, 48.2109)),
-            PinInfo("3", "Schönbrunn", "Schloss Schönbrunn, 13. Bezirk", Position(16.3122, 48.1848)),
-            PinInfo("4", "Prater Riesenrad", "Wiener Riesenrad, 2. Bezirk", Position(16.3959, 48.2166)),
-            PinInfo("5", "Hofburg", "Kaiserliche Residenz, 1. Bezirk", Position(16.3648, 48.2065)),
-            PinInfo("6", "Belvedere", "Schloss Belvedere, 3. Bezirk", Position(16.3808, 48.1915)),
-            PinInfo("7", "Staatsoper", "Wiener Staatsoper, 1. Bezirk", Position(16.3691, 48.2030)),
-            PinInfo("8", "Kunsthistorisches Museum", "Museumsquartier, 1. Bezirk", Position(16.3617, 48.2038)),
-            PinInfo("9", "Naturhistorisches Museum", "Museumsquartier, 1. Bezirk", Position(16.3591, 48.2052)),
-            PinInfo("10", "Karlskirche", "Barockkirche am Karlsplatz, 4. Bezirk", Position(16.3719, 48.1982)),
-            PinInfo("11", "Parlament", "Österreichisches Parlament, 1. Bezirk", Position(16.3592, 48.2081)),
-            PinInfo("12", "Burgtheater", "Nationaltheater, 1. Bezirk", Position(16.3614, 48.2103)),
-            PinInfo("13", "Albertina", "Kunstmuseum, 1. Bezirk", Position(16.3681, 48.2047)),
-            PinInfo("14", "Donauturm", "Aussichtsturm, 22. Bezirk", Position(16.4128, 48.2403)),
-            PinInfo("15", "Naschmarkt", "Berühmter Markt, 6. Bezirk", Position(16.3600, 48.1985)),
-            PinInfo("16", "Secession", "Ausstellungshaus, 1. Bezirk", Position(16.3657, 48.2003)),
-            PinInfo("17", "Hundertwasserhaus", "Architektur-Highlight, 3. Bezirk", Position(16.3931, 48.2076)),
-            PinInfo("18", "Universität Wien", "Hauptgebäude, 1. Bezirk", Position(16.3608, 48.2130)),
-            PinInfo("19", "Votivkirche", "Neugotische Kirche, 9. Bezirk", Position(16.3597, 48.2152)),
-            PinInfo("20", "Zentralfriedhof", "Ehrengräber, 11. Bezirk", Position(16.4397, 48.1508)),
-            PinInfo("21", "Tiergarten Schönbrunn", "Ältester Zoo, 13. Bezirk", Position(16.3027, 48.1820)),
-            PinInfo("22", "Gloriette", "Aussichtspunkt Schönbrunn, 13. Bezirk", Position(16.3084, 48.1782)),
-            PinInfo("23", "Stadtpark", "Johann-Strauß-Denkmal, 1. Bezirk", Position(16.3793, 48.2045)),
-            PinInfo("24", "Volksgarten", "Sisi-Denkmal, 1. Bezirk", Position(16.3622, 48.2085)),
-            PinInfo("25", "Minoritenkirche", "1. Bezirk", Position(16.3641, 48.2096)),
-            PinInfo("26", "Peterskirche", "1. Bezirk", Position(16.3701, 48.2094)),
-            PinInfo("27", "Haus des Meeres", "Aquarium im Flakturm, 6. Bezirk", Position(16.3529, 48.1977)),
-            PinInfo("28", "Museumsquartier (MQ)", "7. Bezirk", Position(16.3585, 48.2030)),
-            PinInfo("29", "Austrian National Library", "Prunksaal, 1. Bezirk", Position(16.3661, 48.2062)),
-            PinInfo("30", "Maria-Theresien-Platz", "1. Bezirk", Position(16.3604, 48.2045)),
-            PinInfo("31", "Graben", "Einkaufsstraße, 1. Bezirk", Position(16.3698, 48.2088)),
-            PinInfo("32", "Kohlmarkt", "Luxusmeile, 1. Bezirk", Position(16.3675, 48.2088)),
-            PinInfo("33", "Michaelerplatz", "Antike Ausgrabungen, 1. Bezirk", Position(16.3666, 48.2082)),
-            PinInfo("34", "Am Hof", "Historischer Platz, 1. Bezirk", Position(16.3679, 48.2111)),
-            PinInfo("35", "Freyung", "Palais-Viertel, 1. Bezirk", Position(16.3653, 48.2116)),
-            PinInfo("36", "Hoher Markt", "Ankeruhr, 1. Bezirk", Position(16.3735, 48.2108)),
-            PinInfo("37", "Judenplatz", "Holocaust-Mahnmal, 1. Bezirk", Position(16.3696, 48.2116)),
-            PinInfo("38", "Stock-im-Eisen-Platz", "1. Bezirk", Position(16.3719, 48.2083)),
-            PinInfo("39", "Kursalon Wien", "Stadtpark, 1. Bezirk", Position(16.3779, 48.2023)),
-            PinInfo("40", "Schwarzenbergplatz", "Hochstrahlbrunnen, 4. Bezirk", Position(16.3762, 48.1983)),
-            PinInfo("41", "Beethoven Museum", "19. Bezirk", Position(16.3557, 48.2447)),
-            PinInfo("42", "Sigmund Freud Museum", "9. Bezirk", Position(16.3631, 48.2187)),
-            PinInfo("43", "Mozarthaus Vienna", "1. Bezirk", Position(16.3752, 48.2085)),
-            PinInfo("44", "Haydnhaus", "6. Bezirk", Position(16.3497, 48.1969)),
-            PinInfo("45", "Schubert Geburtshaus", "9. Bezirk", Position(16.3562, 48.2268)),
-            PinInfo("46", "MAK", "Museum für angewandte Kunst, 1. Bezirk", Position(16.3815, 48.2076)),
-            PinInfo("47", "Leopold Museum", "7. Bezirk", Position(16.3592, 48.2023)),
-            PinInfo("48", "MUMOK", "Museum moderner Kunst, 7. Bezirk", Position(16.3578, 48.2033)),
-            PinInfo("49", "Technisches Museum", "14. Bezirk", Position(16.3182, 48.1908)),
-            PinInfo("50", "Heeresgeschichtliches Museum", "3. Bezirk", Position(16.3879, 48.1848)),
-            PinInfo("51", "Kaisergruft", "Kapuzinergruft, 1. Bezirk", Position(16.3701, 48.2057)),
-            PinInfo("52", "Palais Liechtenstein", "9. Bezirk", Position(16.3595, 48.2224)),
-            PinInfo("53", "Gasometer", "11. Bezirk", Position(16.4189, 48.1851)),
-            PinInfo("54", "Wien Hauptbahnhof", "10. Bezirk", Position(16.3772, 48.1851))
-        )
-    }
+    val pins = remember { DataProvider.allPins }
 
     var selectedPin by remember { mutableStateOf<PinInfo?>(null) }
+
+    LaunchedEffect(initialPinId) {
+        if (initialPinId != null) {
+            val target = pins.find { it.id == initialPinId }
+            if (target != null) {
+                selectedPin = target
+                cameraState.animateTo(
+                    CameraPosition(
+                        target = target.position,
+                        zoom = 15.0
+                    )
+                )
+                onPinNavigated()
+            }
+        }
+    }
     val recentSearches = remember { mutableStateListOf<String>() }
 
     val pinPainter = rememberVectorPainter(Icons.Default.Place)
@@ -191,6 +151,51 @@ fun HomeScreen() {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                val associatedDataset = remember(selectedPin) {
+                    DataProvider.allDatasets.find { it.id == selectedPin!!.datasetId }
+                }
+                
+                associatedDataset?.let { dataset ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = dataset.icon ?: Icons.Default.Stars,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    "Datensatz",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    dataset.name,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
+                            IconButton(onClick = {
+                                selectedPin = null
+                                onNavigateToDownloads()
+                            }) {
+                                Icon(Icons.Default.ArrowForward, contentDescription = "Datensatz anzeigen")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -227,6 +232,7 @@ fun HomeScreen() {
                 options = MapOptions(
                     ornamentOptions = OrnamentOptions(
                         isScaleBarEnabled = false, // Disable native scale bar to use custom one
+                        isCompassEnabled = false,
                         logoAlignment = Alignment.BottomStart,
                         attributionAlignment = Alignment.BottomEnd,
 
@@ -276,15 +282,6 @@ fun HomeScreen() {
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = ornamentPaddingBottom + 24.dp, end = 16.dp)
-            )
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(16.dp)
-                    .width(4.dp)
-                    .height(200.dp)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), CircleShape)
             )
         }
     }

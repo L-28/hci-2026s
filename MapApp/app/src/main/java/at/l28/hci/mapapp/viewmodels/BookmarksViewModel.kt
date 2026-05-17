@@ -2,7 +2,7 @@ package at.l28.hci.mapapp.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import at.l28.hci.mapapp.ui.screens.Dataset
+import at.l28.hci.mapapp.models.Dataset
 
 class BookmarksViewModel : ViewModel() {
     val bookmarks = mutableStateListOf<Dataset>()

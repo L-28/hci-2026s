@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MapAppApp(themeViewModel: ThemeViewModel = viewModel()) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.MAP) }
+    var pendingPinId by rememberSaveable { mutableStateOf<String?>(null) }
 
     NavigationSuiteScaffold(
         modifier = Modifier.fillMaxSize(),
@@ -83,8 +84,17 @@ fun MapAppApp(themeViewModel: ThemeViewModel = viewModel()) {
 //                .safeDrawingPadding()
         ) {
             when (currentDestination) {
-                AppDestinations.MAP -> HomeScreen()
-                AppDestinations.DOWNLOADS -> DownloadsScreen()
+                AppDestinations.MAP -> HomeScreen(
+                    initialPinId = pendingPinId,
+                    onNavigateToDownloads = { currentDestination = AppDestinations.DOWNLOADS },
+                    onPinNavigated = { pendingPinId = null }
+                )
+                AppDestinations.DOWNLOADS -> DownloadsScreen(
+                    onNavigateToPin = { pinId ->
+                        pendingPinId = pinId
+                        currentDestination = AppDestinations.MAP
+                    }
+                )
                 AppDestinations.SETTINGS -> SettingsScreen(themeViewModel)
             }
         }

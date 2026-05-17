@@ -258,8 +258,9 @@ fun BookmarksSection(bookmarksViewModel: BookmarksViewModel) {
                     headlineContent = { Text(dataset.name) },
                     supportingContent = { Text(dataset.category) },
                     leadingContent = {
-                        Icon(dataset.icon, contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary)
+                        dataset.icon?.let {
+                            Icon(it, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        } ?: Spacer(modifier = Modifier.size(24.dp))
                     }
                 )
                 HorizontalDivider(
