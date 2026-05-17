@@ -3,6 +3,8 @@ package at.l28.hci.mapapp.data
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import at.l28.hci.mapapp.models.Dataset
 import at.l28.hci.mapapp.models.DownloadState
 import at.l28.hci.mapapp.models.PinInfo
@@ -82,4 +84,20 @@ object DataProvider {
         PinInfo("57", "Virgilkapelle", "Mittelalterliche Kapelle (U-Bahn Station Stephansplatz)", Position(16.373, 48.208), "history_1912"),
         PinInfo("58", "Westbahnhof WiFi", "Free Wave Hotspot am Westbahnhof", Position(16.337, 48.196), "wifi")
     )
+
+    fun getColorForCategory(category: String): Color {
+        return when (category) {
+            "Basis" -> Color(0xFF9E9E9E) // Grey
+            "Verkehr" -> Color(0xFF2196F3) // Blue
+            "Umwelt" -> Color(0xFF4CAF50) // Green
+            "Kultur" -> Color(0xFFFF9800) // Orange
+            "Infrastruktur" -> Color(0xFF9C27B0) // Purple
+            else -> Color.Black
+        }
+    }
+
+    fun getColorStringForCategory(category: String): String {
+        val color = getColorForCategory(category)
+        return String.format("#%06X", 0xFFFFFF and color.toArgb())
+    }
 }

@@ -31,6 +31,7 @@ import kotlinx.serialization.json.JsonObject
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.expressions.dsl.*
+import org.maplibre.compose.expressions.value.ExpressionValue
 import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
@@ -49,6 +50,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
+import kotlinx.serialization.json.JsonPrimitive
 import at.l28.hci.mapapp.data.DataProvider
 import at.l28.hci.mapapp.models.PinInfo
 
@@ -258,7 +260,14 @@ fun HomeScreen(
                 val pinSource = rememberGeoJsonSource(
                     data = GeoJsonData.Features(
                         FeatureCollection(
-                            pins.map { Feature(geometry = Point(it.position), properties = JsonObject(emptyMap())) }
+                            pins.map { pin ->
+                                val dataset = DataProvider.allDatasets.find { it.id == pin.datasetId }
+                                val color = DataProvider.getColorStringForCategory(dataset?.category ?: "")
+                                Feature(
+                                    geometry = Point(pin.position),
+                                    properties = JsonObject(mapOf("color" to JsonPrimitive(color)))
+                                )
+                            }
                         )
                     )
                 )
@@ -270,7 +279,7 @@ fun HomeScreen(
                         value = pinPainter,
                         drawAsSdf = true
                     ),
-                    iconColor = const(Color.Black),
+                    iconColor = get { get("color") },
                     iconSize = const(1.5f),
                     iconAllowOverlap = const(true)
                 )
