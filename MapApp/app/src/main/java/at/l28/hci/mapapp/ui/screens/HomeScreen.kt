@@ -1,6 +1,7 @@
 package at.l28.hci.mapapp.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -208,9 +209,26 @@ fun HomeScreen(
             SearchSheetContent(
                 recentSearches = recentSearches,
                 onSearch = { query ->
-                    if (query.isNotBlank() && !recentSearches.contains(query)) {
-                        recentSearches.add(0, query)
-                        if (recentSearches.size > 5) recentSearches.removeLast()
+                    if (query.isNotBlank()) {
+                        if (!recentSearches.contains(query)) {
+                            recentSearches.add(0, query)
+                            if (recentSearches.size > 5) recentSearches.removeLast()
+                        }
+                        
+                        // Search for pin
+                        val pin = pins.find {
+                            it.name.contains(query, ignoreCase = true) ||
+                            it.description.contains(query, ignoreCase = true)
+                        }
+                        if (pin != null) {
+                            selectedPin = pin
+                            scope.launch {
+                                cameraState.animateTo(
+                                    CameraPosition(target = pin.position, zoom = 15.0)
+                                )
+                                sheetState.partialExpand()
+                            }
+                        }
                     }
                 },
                 onDismiss = {
@@ -349,22 +367,24 @@ fun SearchSheetContent(
                 items(recentSearches) { search ->
                     ListItem(
                         headlineContent = { Text(search) },
-                        leadingContent = { Icon(Icons.Default.History, contentDescription = null) }
+                        leadingContent = { Icon(Icons.Default.History, contentDescription = null) },
+                        modifier = Modifier.clickable { onSearch(search) }
                     )
                 }
             }
         } else {
             val suggestions = listOf(
-                SearchResult("Voranschlag Wien 2026 (Gemeinde)", "Voranschlag der Gemeinde - Einnahmen und..."),
-                SearchResult("Verkehrsnetz der Wiener Linien Wien", "Länge des Verkehrsnetzes der Wiener Linien..."),
-                SearchResult("Bericht - Laichhilfen Wienfluss 2023 Wien", "Ergebnisse des Laichhilfeprojekts im...")
+                SearchResult("Stephansdom", "Wahrzeichen Wiens, 1. Bezirk"),
+                SearchResult("Schloss Schönbrunn", "Kaiserliche Sommerresidenz"),
+                SearchResult("Prater Riesenrad", "Wiener Riesenrad, 2. Bezirk")
             )
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(suggestions) { result ->
                     ListItem(
                         headlineContent = { Text(result.title, fontWeight = FontWeight.Bold) },
                         supportingContent = { Text(result.description) },
-                        leadingContent = { Icon(Icons.Default.AccountTree, contentDescription = null) }
+                        leadingContent = { Icon(Icons.Default.AccountTree, contentDescription = null) },
+                        modifier = Modifier.clickable { onSearch(result.title) }
                     )
                 }
             }
