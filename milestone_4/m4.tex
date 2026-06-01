@@ -1,0 +1,93 @@
+%----------------------------------------------------------------------------
+\documentclass{article}
+%----------------------------------------------------------------------------
+\usepackage[a4paper, top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+%----------------------------------------------------------------------------
+\usepackage{paracol}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{float}
+\bibliographystyle{ieeetr}
+%----------------------------------------------------------------------------
+\graphicspath{ {./images/} }
+%----------------------------------------------------------------------------
+% fancyhdr setup
+%----------------------------------------------------------------------------
+\pagestyle{fancy}	% activate fancy style
+\fancyhf{}			% clear fancy settings
+% Header
+\fancyhead[L]{Meilenstein 4}
+\fancyhead[R]{v1.0}
+% Footer
+\fancyfoot[C]{Seite \thepage}
+\fancyfoot[R]{\today}
+% lines
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%----------------------------------------------------------------------------
+% first page setup
+%----------------------------------------------------------------------------
+\title{Teamprojekt}
+\author{Adaktylos Leonidas Odysseas, Baumgartner Vincent Vitez, Neda Nikkhousarighiyeh, Alexander Grath}
+\date{} % empty date
+%----------------------------------------------------------------------------
+% reference definitions
+% to use references: compile with bibtex then with pdflatex
+%----------------------------------------------------------------------------
+
+%############################################################################
+\begin{document}
+%
+\maketitle
+%
+\thispagestyle{empty} % clear page number
+%
+% sub-title of the document
+\begin{center}
+\section*{M4 Usability Evaluierung, Weiterentwicklung, und Abschlussbericht}
+\end{center}
+
+% universität wien logo
+\begin{figure}
+	\centering
+	\includegraphics[scale=.6]{univie}
+\end{figure}
+%
+\newpage
+%
+\tableofcontents
+%
+\setcounter{page}{1} % restart page count at 1
+%
+\newpage
+%
+% The \inputs can be change to \include if needed
+% put your section in the section folder and only change this document by adding another \input{...}
+% the sections are <chapter>_<name>.tex files and do NOT include any document structure code
+% there is nothing fancy going on, the content of the files is just pasted here:
+%
+% Screenshots und Beschreibung des Prototyp hinsichtlich Funktionen, Inhalte und Interaktionen 
+% (pdf, ca. 2-3 Seiten Text und Screenshots)
+\input{sections/Benutzertests.tex}
+\input{sections/Lösungsvorschläge.tex}
+% Abschlussbericht
+\input{sections/Motivation.tex}
+\input{sections/Related_Work.tex}
+\input{sections/Design.tex}
+\input{sections/Implementation.tex}
+\input{sections/Evaluation.tex}
+\input{sections/Reflection.tex}
+\input{sections/Conclusion.tex}
+%
+\newpage
+%
+% Reference page, can be deleted if not used
+%
+\bibliography{references}
+%
+\end{document}
