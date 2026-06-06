@@ -1,3 +1,55 @@
-\section{Conclusion}
+\section{Schlussfolgerung und Ausblick}
 
-\lipsum
+\subsection{Zusammenfassung}
+
+MapApp zeigt, dass die in M1 identifizierte Lücke im Bereich mobiler
+Open-Data-Anwendungen für Wien gezielt geschlossen werden kann.
+Von $n = 8$ bestehenden mobilen Apps auf \textit{data.gv.at} war keine
+auf die allgemeine, kartenbasierte Exploration von Open Data ausgerichtet.
+MapApp adressiert genau dieses Desiderat und verbindet in einer kohärenten
+Material-Design-3-Oberfläche drei Funktionsbereiche:
+interaktive Kartenexploration, Datensatzverwaltung und Personalisierung.
+
+\textbf{Stärken:}
+\begin{itemize}
+  \item Die farbkodierte Pindarstellung – motiviert durch \cite{Visualization} –
+        ermöglicht sofortige kategoriale Orientierung ohne Legende.
+  \item Die bidirektionale Navigation zwischen Karte und Downloads
+        erfüllt alle vier Nutzeraufgaben aus M1 (\textit{Erkunden},
+        \textit{Suchen}, \textit{Teilen}, \textit{Schnell informieren})
+        ohne Bildschirmwechsel-Hürden.
+  \item Das Barrierefreiheitssystem (Großschrift, Hochkontrast, Systemdesign)
+        richtet sich an die heterogenen Nutzergruppen, die Simonofski et al.\
+        \cite{simonofski2022} als zentrale Designanforderung identifizieren.
+  \item Offline-Download löst das in M1 als kritisch eingestufte Problem
+        langer Ladezeiten bei schwacher Verbindung strukturell und proaktiv.
+\end{itemize}
+
+\textbf{Schwächen und Einschränkungen:}
+\begin{itemize}
+  \item Die Datenbasis ist statisch im Arbeitsspeicher gehalten.
+        Eine Live-Anbindung an \textit{data.wien.gv.at} \cite{datawien}
+        überstieg den Projektrahmen, ist aber für eine produktive Version
+        unerlässlich.
+  \item Der Download-Fortschritt ist simuliert; echte Offline-Kacheln
+        werden nicht persistent gespeichert.
+  \item Die Pin-Klickerkennung basiert auf euklidischer Näherung statt
+        echtem Layer-Hit-Testing, was bei eng beieinanderliegenden Pins
+        zu Fehlauswahlen führen kann.
+\end{itemize}
+
+\subsection{Interessante nächste Schritte}
+
+\begin{itemize}
+  \item \textbf{Erweiterter Datensatzkatalog:}
+        Einbindung weiterer Wiener Open-Data-Themen wie Luftqualität,
+        Mietpreise oder Bevölkerungsdaten – damit auch die Personas Ralph
+        (beruflich) und Benjamin (Forschung) vollständig bedient werden.
+  \item \textbf{Filter- und Kategorisierungsfunktionen:}
+        In M2 wurden auf Basis von Nutzerfeedback erweiterte Suchfilter
+        (reguläre Ausdrücke, Lizenzfilter) als wünschenswert identifiziert.
+        Diese könnten in einer Folgeversion umgesetzt werden.
+  \item \textbf{Routenplanung:}
+        Integration einer Routenführung, die Open-Data-Ebenen
+        (z.\,B.\ Radwege, ÖPNV-Stationen) direkt in die Berechnung einbezieht.
+\end{itemize}

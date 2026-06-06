@@ -1,3 +1,110 @@
 \section{Benutzertests}
 
-\lipsum
+\subsection{Usability-Aufgaben}
+
+Basierend auf der Aufgabenanalyse aus Meilenstein~1
+wurden vier Usability-Aufgaben entwickelt, die typische Nutzungsszenarien
+der App abdecken.
+Die Testpersonen wurden gebeten, laut zu denken (Think-Aloud-Methode).
+
+\subsubsection*{Aufgabe 1 – Kartennavigation und Pin-Inspektion}
+
+\textbf{Szenario:}
+\textit{„Sie sind gerade in Wien unterwegs und möchten spontan mehr über
+das Kunsthistorische Museum erfahren.
+Finden Sie es auf der Karte, tippen Sie darauf und lesen Sie die
+angezeigten Informationen."}
+
+\textbf{Ziel:} Testen, ob die farbkodierten Pins auffindbar und antippbar sind
+und ob das Detail-Bottom-Sheet intuitiv geöffnet und gelesen werden kann.
+
+\subsubsection*{Aufgabe 2 – Datensatz suchen und herunterladen}
+
+\textbf{Szenario:}
+\textit{„Sie planen eine Radtour durch Wien und möchten offline auf
+Radwegdaten zugreifen können.
+Finden Sie im Downloads-Bereich den Datensatz \emph{Radwege Wien}
+und laden Sie ihn herunter."}
+
+\textbf{Ziel:} Testen, ob die Suchfunktion im Downloads-Tab und
+der Download-Flow klar und verständlich sind.
+
+\subsubsection*{Aufgabe 3 – Suche auf der Karte}
+
+\textbf{Szenario:}
+\textit{„Sie möchten schnell den Standort von \emph{Schloss Schönbrunn}
+auf der Karte sehen.
+Verwenden Sie die Suchfunktion der App, um Schönbrunn zu finden
+und auf der Karte anzuzeigen."}
+
+\textbf{Ziel:} Testen, ob das Such-Bottom-Sheet auf der Kartenansicht
+auffindbar ist und ob die Kamera korrekt auf das Suchergebnis zoomt.
+
+\subsubsection*{Aufgabe 4 – Einstellungen anpassen und Datensatz teilen}
+
+\textbf{Szenario:}
+\textit{„Aktivieren Sie den Dunkelmodus in den Einstellungen.
+Teilen Sie anschließend den Datensatz \emph{Wiener Baumkataster}
+mit jemandem."}
+
+\textbf{Ziel:} Testen, ob die Einstellungen ohne Erklärung gefunden werden
+und ob die Swipe-to-reveal-Geste für die Share-Funktion entdeckt wird.
+
+\subsection{Fragenkatalog}
+
+\subsubsection*{Fragen nach jeder Aufgabe (Post-Task)}
+
+\begin{enumerate}
+  \item Wie schwierig war diese Aufgabe für Sie?\\
+        \textit{(Skala: 1 = sehr einfach \ldots\ 7 = sehr schwierig)}
+  \item Gab es einen Moment, in dem Sie nicht wussten, wie Sie
+        weiter vorgehen sollen? Falls ja: Wo genau?
+  \item Was haben Sie erwartet zu passieren, als Sie auf
+        [jeweilige Schaltfläche / Bereich] getippt haben?
+  \item Was würden Sie an dieser Funktion ändern?
+\end{enumerate}
+
+\subsubsection*{System Usability Scale (SUS) – nach allen Aufgaben}
+
+Die folgenden zehn Aussagen werden auf einer Skala von 1
+(\textit{stimme überhaupt nicht zu}) bis 5 (\textit{stimme voll zu}) bewertet:
+
+\begin{enumerate}
+  \item Ich denke, dass ich diese App regelmäßig nutzen würde.
+  \item Ich fand die App unnötig komplex.
+  \item Ich fand die App einfach zu bedienen.
+  \item Ich denke, ich würde die Unterstützung einer technischen Person
+        benötigen, um diese App zu benutzen.
+  \item Ich fand, dass die verschiedenen Funktionen gut integriert waren.
+  \item Ich fand, dass es zu viele Inkonsistenzen in der App gab.
+  \item Ich könnte mir vorstellen, dass die meisten Menschen die App
+        schnell erlernen würden.
+  \item Ich fand die App sehr umständlich zu bedienen.
+  \item Ich fühlte mich sicher im Umgang mit der App.
+  \item Ich musste viele Dinge lernen, bevor ich die App benutzen konnte.
+\end{enumerate}
+
+\subsubsection*{Abschlussinterview (offen)}
+
+\begin{enumerate}
+  \item Welche Funktion hat Ihnen am meisten gefallen? Warum?
+  \item Welche Funktion hat Sie am meisten frustriert oder verwirrt?
+  \item Würden Sie diese App nutzen, um Wien zu erkunden?
+  \item Welche Funktion vermissen Sie?
+  \item Haben Sie eine ähnliche App bereits verwendet?
+        Was hat diese besser oder schlechter gemacht?
+\end{enumerate}
+
+\subsection{Durchführung}
+
+Der Usability-Test wurde mit insgesamt \textbf{8 Testpersonen}
+durchgeführt, je 2 Testpersonen pro Teammitglied.
+Keine Testperson war Mitglied des Projektteams.
+Jede Sitzung dauerte ca.\ 30–45 Minuten und folgte diesem Ablauf:
+
+\begin{enumerate}
+  \item Begrüßung und Einführung in die Think-Aloud-Methode (5~Min.)
+  \item Durchführung der vier Aufgaben mit Post-Task-Fragen (20–30~Min.)
+  \item Ausfüllen des SUS-Fragebogens (5~Min.)
+  \item Abschlussinterview (5–10~Min.)
+\end{enumerate}

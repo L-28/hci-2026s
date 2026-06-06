@@ -1,3 +1,71 @@
 \section{Related Work}
 
-\lipsum
+\subsection{Open Government Data und Bürgerbeteiligung}
+
+Sayogo et al.\ \cite{open_gov} analysieren in einem Benchmarking-Framework
+35 nationale Open-Data-Portale und identifizieren ein strukturelles Problem:
+Daten werden häufig veröffentlicht, weil sie technisch einfach bereitzustellen sind –
+nicht weil sie für die Bevölkerung besonders relevant wären.
+Rund 66\,\% der Portale bieten Daten in maschinenlesbaren Formaten an,
+doch eine nutzerorientierte visuelle Aufbereitung fehlt fast überall.
+Diese Erkenntnis bildete die Grundlage unserer Designentscheidung,
+Open Data nicht als Rohdaten, sondern als räumlich verortete,
+kontextualisierte Information anzuzeigen.
+
+\subsection{Dashboards und Visualisierung für Bürger:innen}
+
+Simonofski et al.\ \cite{simonofski2022} evaluieren in einer Studie mit
+108 Teilnehmenden 16 Designprinzipien für Open-Government-Data-Dashboards.
+Ihr zentrales Ergebnis: Gut gestaltete Dashboards übertreffen isolierte
+Einzelvisualisierungen deutlich – in Verständlichkeit, Usability und
+wahrgenommener Datenqualität.
+Besonders betonen sie die Notwendigkeit, \emph{heterogene Nutzergruppen}
+explizit zu berücksichtigen: von technikaffinen Expert:innen bis zu
+Gelegenheitsnutzer:innen ohne Datenkenntnisse.
+Diese Erkenntnis spiegelt sich direkt in unseren Personas (Benjamin, Leah,
+Ralph, Luca) und in der gestuften Informationsarchitektur von MapApp wider:
+Die Karte bietet einen sofortigen visuellen Überblick;
+Details sind in einem Bottom Sheet verborgen und werden erst bei
+gezieltem Interesse angezeigt.
+
+\subsection{Einprägsame Visualisierungen}
+
+Borkin et al.\ \cite{Visualization} untersuchen in einer Studie
+mit $n = 261$ Teilnehmenden, welche Eigenschaften Visualisierungen
+einprägsam machen.
+Zwei Ergebnisse sind für MapApp besonders relevant:
+Erstens bleiben \emph{farbige} Visualisierungen mit erkennbaren Symbolen
+signifikant besser in Erinnerung als abstrakte Diagramme.
+Zweitens erhöhen \emph{ungewöhnlichere} Darstellungsformen die Merkfähigkeit.
+Diese Erkenntnisse rechtfertigen unser farbkodiertes Pin-System:
+Statt einer einheitlichen Darstellung aller Datenpunkte werden Pins nach
+Kategorie eingefärbt (Orange~=~Kultur, Blau~=~Verkehr, Grün~=~Umwelt,
+Lila~=~Infrastruktur, Grau~=~Basis), was die Orientierung auf der Karte
+visuell einprägsam macht.
+
+\subsection{Gestaltungsprinzipien für Datenvisualisierungen}
+
+Rougier et al.\ \cite{simple_rules} formulieren zehn praktische Regeln
+für gute Datenvisualisierungen.
+Für MapApp besonders relevant sind Regel~3 (\textit{Beachte das Medium}):
+Eine mobile App erfordert kompakte, auf kleinen Bildschirmen gut lesbare
+Darstellungen – daher verzichten wir auf eingebettete Diagramme und
+setzen stattdessen auf die Karte als primäres Visualisierungsmedium.
+Regel~8 (\textit{Vermeide Chartjunk}) rechtfertigt das bewusste Verbergen
+sekundärer Informationen im Bottom Sheet und im Swipe-to-reveal-Muster.
+
+\subsection{Verwandte Anwendungen und Konkurrenzprodukte}
+
+Unsere Konkurrenzanalyse (M1) zeigt, dass webbasierte Plattformen wie
+\textit{Winterthur in Zahlen} und \textit{visualize.admin.ch} zwar
+Kartenansichten bieten, aber nicht für mobile, kontextbezogene Nutzung
+ausgelegt sind.
+\textit{Eurostat} bietet die visuell ansprechendsten Darstellungen,
+ist aber in seiner Individualiserbarkeit eingeschränkt.
+Der \textit{OECD Data Explorer} leidet unter schwieriger und unflüssiger
+Bedienung.
+Die offizielle \textit{Wien Karte} \cite{wienkarte} der Stadt Wien deckt
+zwar Transportdaten ab, bietet aber keine allgemeine Open-Data-Exploration
+oder Datensatzverwaltung.
+MapApp füllt diese Lücke: eine mobile, kartenbasierte Anwendung
+speziell für Wiens Open-Data-Ökosystem.

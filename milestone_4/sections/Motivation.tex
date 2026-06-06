@@ -1,3 +1,45 @@
 \section{Motivation}
 
-\lipsum
+Städte weltweit veröffentlichen zunehmend große Mengen an offenen Daten \cite{open_gov}.
+Wien ist dabei besonders aktiv: Das städtische Open-Data-Portal \textit{data.wien.gv.at}
+stellt über 300 Datensätze frei zur Verfügung \cite{datawien}.
+Trotz dieser Fülle zeigt unsere Konkurrenzanalyse aus Meilenstein~1 ein ernüchterndes Bild:
+Von den insgesamt $n = 345$ auf \textit{data.gv.at} gelisteten Anwendungen für den
+Publisher \enquote{Stadt Wien} visualisieren nur rund 100 tatsächlich offene Daten.
+Filtert man auf mobile Apps, verbleiben lediglich \textbf{$n = 8$ Anwendungen} –
+und selbst diese sind überwiegend hoch spezialisiert oder veraltet.
+Im Bereich allgemeiner Open-Data-Visualisierung für Wien besteht somit fast keine
+direkte Konkurrenz.
+
+Die Hürde liegt nicht in der Verfügbarkeit der Daten, sondern in ihrer \emph{Zugänglichkeit}.
+Simonofski et al.\ \cite{simonofski2022} zeigen, dass gut gestaltete Dashboards das
+Verständnis offener Daten bei Bürger:innen deutlich erhöhen – aber nur dann, wenn
+heterogene Nutzergruppen von Beginn an berücksichtigt werden.
+In der Praxis werden Open-Data-Datensätze jedoch häufig ohne Rücksicht auf
+Nutzerinteressen veröffentlicht \cite{open_gov}, in schlecht verarbeitbaren
+Formaten und ohne visuelle Aufbereitung.
+
+Dieses Projekt begegnet diesem Problem mit \textbf{MapApp}: einer nativen
+Android-Anwendung, die Wiens offene Datensätze auf einer interaktiven Karte
+räumlich erkundbar macht.
+Statt ein Datenportal zu besuchen und Rohdaten zu interpretieren, sehen
+Nutzer:innen Datensatzinhalte als farbkodierte, interaktive Kartenmarkierungen –
+ergänzt durch Offline-Downloads, Suchfunktion und Barrierefreiheitsoptionen.
+
+Aus der Nutzeranalyse in Meilenstein~1 ergaben sich drei primäre Nutzergruppen
+sowie eine sekundäre:
+\begin{itemize}
+  \item \textbf{Technikaffine Studierende} (Benjamin Eberhart) – suchen gezielt
+        nach spezifischen Datensätzen und wünschen sich detaillierte Filteroptionen.
+  \item \textbf{Content Creator und Blogger} (Leah Reiniger) – benötigen visuell
+        ansprechende Inhalte, die einfach geteilt werden können.
+  \item \textbf{Berufliche Nutzer:innen} (Ralph Ebersbach) – verlassen sich auf
+        Datengenauigkeit und brauchen schnellen, wiederholbaren Zugang zu
+        bestimmten Datensätzen.
+  \item \textbf{Gelegenheitsnutzer:innen} (Luca Kunze) – möchten ohne
+        Vorkenntnisse unkompliziert zu interessanten Informationen gelangen.
+\end{itemize}
+
+Die zentrale Gestaltungsherausforderung besteht darin, \emph{Informationsdichte}
+und \emph{Benutzerfreundlichkeit} in Einklang zu bringen –
+eine Spannung, die den gesamten Designprozess über vier Meilensteine geprägt hat.

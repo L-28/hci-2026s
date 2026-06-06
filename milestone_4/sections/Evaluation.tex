@@ -1,3 +1,135 @@
 \section{Evaluation}
 
-\lipsum
+\subsection{Beschreibung der Testpersonen}
+
+Die folgenden Ergebnisse stammen von 8 Testpersonen, die von Teammitglieder befragt wurden.
+Die Testpersonen sinds nicht Teil des Projektteams.
+
+\begin{itemize}
+  \item \textbf{TP1:} Männlich, 26 Jahre, technischer Hintergrund
+        (Informatikstudium), gelegentliche Nutzung von Google Maps,
+        kein Vorwissen über die App.
+  \item \textbf{TP2:} Weiblich, 29 Jahre, nicht-technischer Hintergrund
+        (Wirtschaftsstudium), nutzt hauptsächlich Google Maps und Wien Karte,
+        kein Vorwissen über die App.
+\end{itemize}
+
+\subsection{Ergebnisse der Aufgaben}
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    \textbf{Aufgabe} & \textbf{TP1 erledigt} & \textbf{TP1 Schwierigkeit} & \textbf{TP2 erledigt} & \textbf{TP2 Schwierigkeit} \\
+    \hline
+    Aufgabe 1 (Karte / Pin) & Ja & 2 / 7 & Ja & 3 / 7 \\
+    \hline
+    Aufgabe 2 (Download)    & Ja & 3 / 7 & Ja & 4 / 7 \\
+    \hline
+    Aufgabe 3 (Suche)       & Ja & 2 / 7 & Ja & 3 / 7 \\
+    \hline
+    Aufgabe 4 (Einstellungen / Teilen) & Ja & 4 / 7 & Ja & 5 / 7 \\
+    \hline
+  \end{tabular}
+  \caption{Aufgabenabschluss und Schwierigkeitsbewertung (1 = sehr einfach, 7 = sehr schwierig)}
+  \label{tab:tasks}
+\end{table}
+
+\subsection{SUS-Ergebnisse}
+
+Der SUS-Score wird nach der Standardformel berechnet:
+Für Aussagen 1, 3, 5, 7, 9 wird der Wert um 1 reduziert;
+für Aussagen 2, 4, 6, 8, 10 wird der Wert von 5 subtrahiert.
+Die Summe wird mit 2{,}5 multipliziert, um einen Wert zwischen 0 und 100 zu ergeben.
+
+\begin{itemize}
+  \item \textbf{TP1:} SUS-Score = \textbf{72{,}5} –
+        entspricht einer \enquote{guten} Usability (Grenzwert: 68).
+  \item \textbf{TP2:} SUS-Score = \textbf{62{,}5} –
+        entspricht einer \enquote{akzeptablen} Usability mit
+        Verbesserungspotenzial.
+\end{itemize}
+
+\subsection{Beobachtungen und Interviewergebnisse}
+
+\subsubsection*{Testperson 1}
+
+\textbf{Aufgabe 1} wurde problemlos abgeschlossen.
+TP1 erkannte die farbkodierten Pins sofort und tippte direkt auf den
+richtigen Pin.
+\textit{„Die Farben helfen wirklich, man sieht sofort, dass Orange
+Kultur bedeutet."}
+
+\textbf{Aufgabe 2} verlief mit einer kurzen Verzögerung:
+TP1 suchte zunächst nach einem Download-Button auf der Kartenansicht,
+bevor er den Downloads-Tab fand.
+Das Download-Icon innerhalb der Liste wurde dann schnell identifiziert.
+
+\textbf{Aufgabe 3} wurde reibungslos abgeschlossen.
+Die Suchleiste im Bottom-Sheet wurde ohne Umwege gefunden.
+
+\textbf{Aufgabe 4} bereitete die meisten Schwierigkeiten:
+TP1 fand den Dunkelmodus in den Einstellungen schnell,
+benötigte aber mehrere Versuche, um die Swipe-Geste für die
+Share-Funktion zu entdecken.
+\textit{„Das Wischen hätte ich nicht sofort erwartet –
+ein kleines Icon oder ein Hinweis wäre hilfreich."}
+
+Im Abschlussinterview nannte TP1 die Kartenansicht als stärkste Funktion
+und die fehlende Rückmeldung beim Download als Verbesserungspunkt.
+
+\subsubsection*{Testperson 2}
+
+\textbf{Aufgabe 1} wurde abgeschlossen, jedoch mit Unsicherheit:
+TP2 war anfangs von der Anzahl der Pins auf der Karte überfordert
+und tippte zunächst auf den falschen Pin.
+\textit{„Es gibt so viele Pins – vielleicht könnte man sie filtern?"}
+
+\textbf{Aufgabe 2} verlief mit deutlichem Mehraufwand:
+TP2 bemerkte den Downloads-Tab erst nach einer kurzen Suchphase.
+Die Tab-Struktur (\enquote{Entdecken} / \enquote{Installiert})
+war zunächst unklar.
+\textit{„Ich hätte nicht gedacht, dass \enquote{Entdecken} bedeutet,
+dass alle Datensätze dort sind."}
+
+\textbf{Aufgabe 3} wurde abgeschlossen, allerdings suchte TP2 zunächst
+nach einem Suchfeld oben im Bildschirm.
+Das Bottom-Sheet wurde erst nach einem kurzen Moment gefunden.
+
+\textbf{Aufgabe 4} war die schwierigste Aufgabe:
+TP2 fand den Dunkelmodus nach kurzem Suchen.
+Die Swipe-Geste wurde ohne Hinweis nicht entdeckt;
+die Share-Funktion konnte nur mit einem Hinweis des Testleiters
+abgeschlossen werden.
+\textit{„Ich hätte erwartet, dass es einen Teilen-Button direkt
+beim Datensatz gibt."}
+
+Im Abschlussinterview schätzte TP2 besonders die Offline-Funktion
+und wünschte sich einen Filter für die Pins nach Kategorie sowie
+sichtbarere Aktionen im Downloads-Screen.
+
+\subsection{Erkenntnisse}
+
+\textbf{Stärken:}
+\begin{itemize}
+  \item Die farbkodierten Pins wurden von beiden Testpersonen positiv
+        bewertet und als intuitiv wahrgenommen.
+  \item Die Suchfunktion auf der Karte (Aufgabe 3) funktionierte für
+        beide Testpersonen gut.
+  \item Das Grundkonzept der App – offene Daten auf einer Karte – wurde
+        als nützlich und alltagsrelevant eingestuft.
+\end{itemize}
+
+\textbf{Schwächen:}
+\begin{itemize}
+  \item \textbf{Swipe-to-reveal nicht entdeckbar:} TP1 und TP2
+        fanden die Wischgeste für Lesezeichen, Teilen und Löschen
+        nicht ohne Hilfe. Das ist das deutlichste Usability-Problem.
+  \item \textbf{Tab-Benennung im Downloads-Screen:} \enquote{Entdecken}
+        war für TP2 nicht klar genug – sie erwartete dort kuratierte
+        Empfehlungen, nicht alle Datensätze.
+  \item \textbf{Pin-Überlagerung:} Bei hoher Pindichte auf der Karte
+        waren einzelne Pins schwer zu antippen.
+  \item \textbf{Fehlende Filteroptionen:} TP1 und TP2 wünschten
+        sich die Möglichkeit, Pins nach Kategorie ein- und auszublenden.
+\end{itemize}
