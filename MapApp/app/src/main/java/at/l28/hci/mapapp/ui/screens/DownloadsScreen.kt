@@ -1,5 +1,9 @@
 package at.l28.hci.mapapp.ui.screens
 
+import kotlinx.coroutines.launch
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Animatable
+import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,6 +37,8 @@ import at.l28.hci.mapapp.models.Dataset
 import at.l28.hci.mapapp.models.DownloadState
 import kotlin.math.roundToInt
 
+import androidx.compose.ui.text.style.TextAlign
+import at.l28.hci.mapapp.ui.theme.MapAppTheme
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -44,8 +50,13 @@ fun DownloadsScreen(
     bookmarksViewModel: BookmarksViewModel = viewModel(),
     onNavigateToPin: (String) -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE) }
     var searchQuery by remember { mutableStateOf("") }
     var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var onboardingShown by remember {
+        mutableStateOf(prefs.getBoolean("downloads_swipe_onboarding_shown", false))
+    }
 
     val allDatasets = remember { DataProvider.allDatasets }
 
@@ -71,7 +82,7 @@ fun DownloadsScreen(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .background(Color(0xFFFBF8FF))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Text(
             text = "Downloads",
@@ -108,7 +119,8 @@ fun DownloadsScreen(
         }
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(filteredDatasets) { dataset ->
+            items(filteredDatasets.size) { index ->
+                val dataset = filteredDatasets[index]
                 val state = downloadStates[dataset.id] ?: DownloadState.NOT_DOWNLOADED
                 val progress = downloadProgress[dataset.id] ?: 0f
 
@@ -118,6 +130,11 @@ fun DownloadsScreen(
                     progress = progress,
                     isBookmarked = bookmarksViewModel.isBookmarked(dataset.id),
                     isExpanded = expandedDatasetId == dataset.id,
+                    shouldAnimateOnboarding = !onboardingShown && index == 0,
+                    onOnboardingComplete = {
+                        onboardingShown = true
+                        prefs.edit().putBoolean("downloads_swipe_onboarding_shown", true).apply()
+                    },
                     onToggleExpand = {
                         expandedDatasetId = if (expandedDatasetId == dataset.id) null else dataset.id
                     },
@@ -155,6 +172,8 @@ fun SwipeableDatasetItem(
     progress: Float,
     isBookmarked: Boolean = false,
     isExpanded: Boolean = false,
+    shouldAnimateOnboarding: Boolean = false,
+    onOnboardingComplete: () -> Unit = {},
     onToggleExpand: () -> Unit = {},
     onBookmark: () -> Unit = {},
     onDownload: () -> Unit,
@@ -162,19 +181,32 @@ fun SwipeableDatasetItem(
     onNavigateToPin: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
-    var offsetX by remember { mutableFloatStateOf(0f) }
     val menuWidth = 200.dp
     val menuWidthPx = with(LocalDensity.current) { menuWidth.toPx() }
 
-    val animatedOffsetX by animateFloatAsState(
-        targetValue = offsetX,
-        label = "offset"
-    )
+    val scope = rememberCoroutineScope()
+    val offsetX = remember { Animatable(0f) }
+
+    LaunchedEffect(shouldAnimateOnboarding) {
+        if (shouldAnimateOnboarding) {
+            delay(500) // Small delay before starting
+            offsetX.animateTo(
+                targetValue = -menuWidthPx,
+                animationSpec = tween(durationMillis = 1000)
+            )
+            delay(1200) // Pause to let the user see actions
+            offsetX.animateTo(
+                targetValue = 0f,
+                animationSpec = tween(durationMillis = 1000)
+            )
+            onOnboardingComplete()
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFBF8FF))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -184,7 +216,7 @@ fun SwipeableDatasetItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    onClick = { onBookmark(); offsetX = 0f },
+                    onClick = { onBookmark(); scope.launch { offsetX.snapTo(0f) } },
                     shape = CircleShape,
                     color = if (isBookmarked) MaterialTheme.colorScheme.primaryContainer
                     else MaterialTheme.colorScheme.secondaryContainer,
@@ -209,7 +241,7 @@ fun SwipeableDatasetItem(
                             putExtra(Intent.EXTRA_TEXT, "${dataset.name}\n${dataset.description}\nhttps://data.wien.gv.at/")
                         }
                         context.startActivity(Intent.createChooser(intent, null))
-                        offsetX = 0f
+                        scope.launch { offsetX.snapTo(0f) }
                     },
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.secondaryContainer,
@@ -223,34 +255,40 @@ fun SwipeableDatasetItem(
                 Surface(
                     onClick = {
                         onDelete()
-                        offsetX = 0f
+                        scope.launch { offsetX.snapTo(0f) }
                     },
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(48.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White, modifier = Modifier.size(24.dp))
+                        Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp))
                     }
                 }
             }
 
             Surface(
                 modifier = Modifier
-                    .offset { IntOffset(animatedOffsetX.roundToInt(), 0) }
+                    .offset { IntOffset(offsetX.value.roundToInt(), 0) }
                     .draggable(
                         state = rememberDraggableState { delta ->
-                            val newOffset = (offsetX + delta).coerceIn(-menuWidthPx, 0f)
-                            offsetX = newOffset
+                            val newOffset = (offsetX.value + delta).coerceIn(-menuWidthPx, 0f)
+                            scope.launch { offsetX.snapTo(newOffset) }
                         },
                         orientation = Orientation.Horizontal,
                         onDragStopped = {
-                            offsetX = if (offsetX < -menuWidthPx / 2) -menuWidthPx else 0f
+                            val targetValue = if (offsetX.value < -menuWidthPx / 2) -menuWidthPx else 0f
+                            scope.launch {
+                                offsetX.animateTo(
+                                    targetValue = targetValue,
+                                    animationSpec = tween(durationMillis = 300)
+                                )
+                            }
                         }
                     )
                     .clickable { onToggleExpand() }
                     .fillMaxWidth(),
-                color = Color(0xFFFBF8FF)
+                color = MaterialTheme.colorScheme.background
             ) {
                 ListItem(
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
@@ -355,5 +393,19 @@ fun SwipeableDatasetItem(
 @Preview(showBackground = true)
 @Composable
 fun DownloadsScreenPreview() {
-    DownloadsScreen()
+    MapAppTheme(darkTheme = false) {
+        Surface {
+            DownloadsScreen()
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DownloadsScreenDarkPreview() {
+    MapAppTheme(darkTheme = true) {
+        Surface {
+            DownloadsScreen()
+        }
+    }
 }
