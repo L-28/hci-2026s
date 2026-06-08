@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +56,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
-        skipHiddenState = false
+        skipHiddenState = true
     )
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
@@ -381,6 +382,11 @@ fun SearchSheetContent(
                             Icon(Icons.Default.Mic, contentDescription = null)
                         }
                     },
+                    modifier = Modifier.onFocusChanged { 
+                        if (it.isFocused && !expanded) {
+                            handleExpandedChange(true)
+                        }
+                    }
                 )
             },
             expanded = expanded,
