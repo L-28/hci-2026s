@@ -53,6 +53,13 @@ fun DownloadsScreen(
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE) }
     var searchQuery by remember { mutableStateOf("") }
+    var searchExpanded by remember { mutableStateOf(false) }
+
+    // Automatically expand while typing
+    LaunchedEffect(searchQuery) {
+        if (searchQuery.isNotEmpty()) searchExpanded = true
+    }
+
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var onboardingShown by remember {
         mutableStateOf(prefs.getBoolean("downloads_swipe_onboarding_shown", false))
@@ -91,21 +98,53 @@ fun DownloadsScreen(
             modifier = Modifier.padding(16.dp)
         )
 
-        TextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
+        val suggestions = remember(searchQuery) {
+            if (searchQuery.isBlank()) emptyList()
+            else allDatasets.filter {
+                it.name.contains(searchQuery, ignoreCase = true) ||
+                        it.category.contains(searchQuery, ignoreCase = true)
+            }
+        }
+
+        SearchBar(
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = searchQuery,
+                    onQueryChange = { searchQuery = it },
+                    onSearch = { searchExpanded = false },
+                    expanded = searchExpanded,
+                    onExpandedChange = { searchExpanded = it },
+                    placeholder = { Text("Karten oder Layer suchen...") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(Icons.Default.Close, contentDescription = "Clear")
+                            }
+                        }
+                    },
+                )
+            },
+            expanded = searchExpanded,
+            onExpandedChange = { searchExpanded = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            placeholder = { Text("Karten oder Layer suchen...") },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-            shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            )
-        )
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(suggestions) { dataset ->
+                    ListItem(
+                        headlineContent = { Text(dataset.name) },
+                        supportingContent = { Text(dataset.category) },
+                        leadingContent = { dataset.icon?.let { Icon(it, contentDescription = null) } },
+                        modifier = Modifier.clickable {
+                            searchQuery = dataset.name
+                            searchExpanded = false
+                        }
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 

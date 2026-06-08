@@ -8,11 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.AccountTree
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Stars
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -226,8 +222,11 @@ fun HomeScreen(
                         }
                     }
                 },
+                onExpand = {
+                    scope.launch { sheetState.expand() }
+                },
                 onDismiss = {
-                    scope.launch { sheetState.hide() }
+                    scope.launch { sheetState.partialExpand() }
                 }
             )
         },
@@ -314,9 +313,36 @@ fun HomeScreen(
 fun SearchSheetContent(
     recentSearches: List<String> = emptyList(),
     onSearch: (String) -> Unit = {},
+    onExpand: () -> Unit = {},
     onDismiss: () -> Unit
 ) {
     var query by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    // Update expanded based on callback from SearchBar
+    val handleExpandedChange: (Boolean) -> Unit = {
+        expanded = it
+        if (it) onExpand()
+    }
+
+    // Automatically expand while typing
+    LaunchedEffect(query) {
+        if (query.isNotEmpty() && !expanded) {
+            handleExpandedChange(true)
+        }
+    }
+
+    val pins = remember { DataProvider.allPins }
+    val suggestions = remember(query) {
+        if (query.isBlank()) {
+            recentSearches.map { SearchResult(it, "Frühere Suche") }
+        } else {
+            pins.filter {
+                it.name.contains(query, ignoreCase = true) ||
+                        it.description.contains(query, ignoreCase = true)
+            }.map { SearchResult(it.name, it.description) }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -330,57 +356,92 @@ fun SearchSheetContent(
                     onQueryChange = { query = it },
                     onSearch = {
                         onSearch(it)
-                        query = ""
+                        expanded = false
                     },
-                    expanded = false,
-                    onExpandedChange = {},
+                    expanded = expanded,
+                    onExpandedChange = handleExpandedChange,
                     placeholder = { Text("Suchen") },
                     leadingIcon = {
-                        IconButton(onClick = onDismiss) {
+                        IconButton(onClick = {
+                            if (expanded) {
+                                expanded = false
+                                query = ""
+                            }
+                            onDismiss()
+                        }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         }
                     },
-                    trailingIcon = { Icon(Icons.Default.Mic, contentDescription = null) },
+                    trailingIcon = {
+                        if (query.isNotEmpty()) {
+                            IconButton(onClick = { query = "" }) {
+                                Icon(Icons.Default.Close, contentDescription = "Clear")
+                            }
+                        } else {
+                            Icon(Icons.Default.Mic, contentDescription = null)
+                        }
+                    },
                 )
             },
-            expanded = false,
-            onExpandedChange = {},
+            expanded = expanded,
+            onExpandedChange = handleExpandedChange,
             modifier = Modifier.fillMaxWidth(),
             windowInsets = WindowInsets(0)
-        ) { }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (recentSearches.isNotEmpty()) {
-            Text(
-                "Frühere Suchen",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(recentSearches) { search ->
-                    ListItem(
-                        headlineContent = { Text(search) },
-                        leadingContent = { Icon(Icons.Default.History, contentDescription = null) },
-                        modifier = Modifier.clickable { onSearch(search) }
-                    )
-                }
-            }
-        } else {
-            val suggestions = listOf(
-                SearchResult("Stephansdom", "Wahrzeichen Wiens, 1. Bezirk"),
-                SearchResult("Schloss Schönbrunn", "Kaiserliche Sommerresidenz"),
-                SearchResult("Prater Riesenrad", "Wiener Riesenrad, 2. Bezirk")
-            )
+        ) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(suggestions) { result ->
                     ListItem(
                         headlineContent = { Text(result.title, fontWeight = FontWeight.Bold) },
                         supportingContent = { Text(result.description) },
-                        leadingContent = { Icon(Icons.Default.AccountTree, contentDescription = null) },
-                        modifier = Modifier.clickable { onSearch(result.title) }
+                        leadingContent = {
+                            Icon(
+                                if (query.isBlank()) Icons.Default.History else Icons.Default.Place,
+                                contentDescription = null
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onSearch(result.title)
+                            expanded = false
+                        }
                     )
+                }
+            }
+        }
+
+        if (!expanded) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (recentSearches.isNotEmpty()) {
+                Text(
+                    "Frühere Suchen",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(recentSearches) { search ->
+                        ListItem(
+                            headlineContent = { Text(search) },
+                            leadingContent = { Icon(Icons.Default.History, contentDescription = null) },
+                            modifier = Modifier.clickable { onSearch(search) }
+                        )
+                    }
+                }
+            } else {
+                val staticSuggestions = listOf(
+                    SearchResult("Stephansdom", "Wahrzeichen Wiens, 1. Bezirk"),
+                    SearchResult("Schloss Schönbrunn", "Kaiserliche Sommerresidenz"),
+                    SearchResult("Prater Riesenrad", "Wiener Riesenrad, 2. Bezirk")
+                )
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(staticSuggestions) { result ->
+                        ListItem(
+                            headlineContent = { Text(result.title, fontWeight = FontWeight.Bold) },
+                            supportingContent = { Text(result.description) },
+                            leadingContent = { Icon(Icons.Default.AccountTree, contentDescription = null) },
+                            modifier = Modifier.clickable { onSearch(result.title) }
+                        )
+                    }
                 }
             }
         }
