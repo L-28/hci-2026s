@@ -1,0 +1,65 @@
+%----------------------------------------------------------------------------
+\documentclass{article}
+%----------------------------------------------------------------------------
+\usepackage[a4paper, top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
+%----------------------------------------------------------------------------
+\usepackage{paracol}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{float}
+\bibliographystyle{ieeetr}
+%----------------------------------------------------------------------------
+\graphicspath{ {../../milestone_4/images/} }
+%----------------------------------------------------------------------------
+% fancyhdr setup
+%----------------------------------------------------------------------------
+\pagestyle{fancy}	% activate fancy style
+\fancyhf{}			% clear fancy settings
+% Header
+\fancyhead[L]{Protokoll}
+\fancyhead[R]{v1.0}
+% Footer
+\fancyfoot[C]{Seite \thepage}
+\fancyfoot[R]{\today}
+% lines
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%----------------------------------------------------------------------------
+% first page setup
+%----------------------------------------------------------------------------
+\title{Usability Test Protokoll}
+\author{Neda Nikkhousarighiyeh}
+\date{} % empty date
+%----------------------------------------------------------------------------
+% reference definitions
+% to use references: compile with bibtex then with pdflatex
+%----------------------------------------------------------------------------
+%############################################################################
+\begin{document}
+%
+\maketitle
+%
+\thispagestyle{empty} % clear page number
+%
+% universität wien logo
+\begin{figure}
+	\centering
+	\includegraphics[scale=.6]{univie}
+\end{figure}
+%
+\newpage
+%
+\tableofcontents % delete if not required
+%
+\setcounter{page}{1} % restart page count at 1
+%
+\newpage
+%
+%
+%
+\end{document}
