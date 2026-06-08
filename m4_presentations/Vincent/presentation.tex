@@ -4,6 +4,8 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning, calc}
 \usepackage{caption}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
 
 \newcommand{\ideaicon}{\ding{72}}
 \newcommand{\screenicon}{\ding{229}}
@@ -18,5 +20,53 @@
 %\institute{Centre for Modern Beamer Themes} % brauchen wir glaub ich nicht
 \begin{document}
   \maketitle
-  Text goes here.
+
+  % ============================================================
+  \begin{frame}{Testperson 4}
+    \textbf{Profil:} Männlich, 23 J., VWL/Politikwissenschaft, nutzt Google Maps täglich.
+
+    \vspace{0.4cm}
+    \begin{tabular}{@{}lll@{}}
+      \textbf{Aufgabe} & \textbf{Ergebnis} & \textbf{Hauptproblem} \\
+      \hline
+      1 – Kartennavigation & \checkicon\ Bestanden   & Pins zu dicht \\
+      2 – Download         & \checkicon\ Bestanden   & Tab-Name Entdecken  unklar \\
+      3 – Suche            & \checkicon\ Bestanden   & Pin nach Suche nicht markiert \\
+      4 – Teilen           & \warnicon\ Mit Hinweis  & Swipe-Geste nicht erkannt \\
+    \end{tabular}
+
+    \vspace{0.5cm}
+    \textbf{SUS-Score: 77{,}5} – \textit{gut}
+  \end{frame}
+
+  % ============================================================
+  \begin{frame}{Testperson 5}
+    \textbf{Profil:} Weiblich, 21 J., Publizistik, nutzt Google Maps gelegentlich.
+
+    \vspace{0.4cm}
+    \begin{tabular}{@{}lll@{}}
+      \textbf{Aufgabe} & \textbf{Ergebnis} & \textbf{Hauptproblem} \\
+      \hline
+      1 – Kartennavigation & \warnicon\ Mit Umweg        & Falschen Pin angetippt \\
+      2 – Download         & \checkicon\ Bestanden       & -- \\
+      3 – Suche            & \warnicon\ Mit Bestätigung  & Kein markierter Pin  \\
+      4 – Teilen           & \warnicon\ Mit Hinweis      & Swipe-Geste nicht erkannt \\
+    \end{tabular}
+
+    \vspace{0.5cm}
+    \textbf{SUS-Score: 60{,}0} – \textit{akzeptabel, Verbesserungspotenzial}
+  \end{frame}
+
+  % ============================================================
+  \begin{frame}{Beobachtungen \& Erkenntnisse}
+    \begin{itemize}
+      \setlength\itemsep{0.7em}
+      \item \textbf{Swipe zum Teilen} ohne Hinweis in beiden Fällen nicht entdeckbar
+      \item \textbf{Pin-Hervorhebung} nach Suche fehlt; Nutzer unsicher wo sie sind
+      \item \textbf{Suchleiste} wird oben erwartet (Google-Maps-Konvention)
+      \item \textbf{Download-Feedback} fehlt; Nutzer unsicher ob Aktion erfolgreich war
+      \item \textbf{Pin-Dichte} im Zentrum erschwert gezieltes Antippen
+    \end{itemize}
+  \end{frame}
+
 \end{document}
