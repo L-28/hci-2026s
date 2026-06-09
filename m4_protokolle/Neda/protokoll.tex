@@ -12,54 +12,279 @@
 \usepackage[ngerman]{babel}
 \usepackage{csquotes}
 \usepackage{float}
+\usepackage{booktabs}
 \bibliographystyle{ieeetr}
 %----------------------------------------------------------------------------
 \graphicspath{ {../../milestone_4/images/} }
 %----------------------------------------------------------------------------
-% fancyhdr setup
-%----------------------------------------------------------------------------
-\pagestyle{fancy}	% activate fancy style
-\fancyhf{}			% clear fancy settings
-% Header
+\pagestyle{fancy}
+\fancyhf{}
 \fancyhead[L]{Protokoll}
 \fancyhead[R]{v1.0}
-% Footer
 \fancyfoot[C]{Seite \thepage}
 \fancyfoot[R]{\today}
-% lines
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 %----------------------------------------------------------------------------
-% first page setup
-%----------------------------------------------------------------------------
 \title{Usability Test Protokoll}
 \author{Neda Nikkhousarighiyeh}
-\date{} % empty date
-%----------------------------------------------------------------------------
-% reference definitions
-% to use references: compile with bibtex then with pdflatex
-%----------------------------------------------------------------------------
+\date{}
 %############################################################################
 \begin{document}
 %
 \maketitle
+\thispagestyle{empty}
 %
-\thispagestyle{empty} % clear page number
-%
-% universität wien logo
 \begin{figure}
-	\centering
-	\includegraphics[scale=.6]{univie}
+    \centering
+    \includegraphics[scale=.6]{univie}
 \end{figure}
 %
-\newpage
-%
-\tableofcontents % delete if not required
-%
-\setcounter{page}{1} % restart page count at 1
-%
-\newpage
-%
-%
-%
+\setcounter{page}{1}
+
+% ============================================================
+\section{Allgemeine Informationen}
+% ============================================================
+
+\begin{itemize}
+    \item \textbf{Testleiterin:} Neda Nikkhousarighiyeh
+    \item \textbf{Anzahl Testpersonen:} 2
+    \item \textbf{Methode:} Think-Aloud, Post-Task-Fragen, SUS-Fragebogen, Abschlussinterview
+    \item \textbf{Getestete App:} MapApp – Interaktive Visualisierung von Open Data der Stadt Wien
+\end{itemize}
+
+Die vier Aufgaben wurden jeder Testperson in schriftlicher Form vorgelegt.
+Die Testpersonen wurden gebeten, laut zu denken und alle Gedanken während der
+Bearbeitung zu äußern.
+
+% ============================================================
+\section{Testperson 1 (TP1)}
+% ============================================================
+
+\subsection*{Demografische Informationen}
+\begin{itemize}
+    \item \textbf{Alter:} 26 Jahre
+    \item \textbf{Geschlecht:} Männlich
+    \item \textbf{Hintergrund:} Technisch (Informatikstudium)
+    \item \textbf{Genutzte Karten-Apps:} Google Maps (gelegentlich)
+    \item \textbf{Vorwissen über die App:} Keines
+\end{itemize}
+
+\subsection*{Aufgabenergebnisse}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|p{7cm}|}
+        \hline
+        \textbf{Aufgabe} & \textbf{Erledigt} & \textbf{Schwierigkeit (1–7)} & \textbf{Beobachtung} \\
+        \hline
+        1. Karte / Pin & Ja & 2 & Pin sofort gefunden, Farben wurden direkt verstanden. \\
+        \hline
+        2. Download & Ja & 3 & Suchte zunächst nach Download-Button auf der Kartenansicht, fand dann den Downloads-Tab. \\
+        \hline
+        3. Suche & Ja & 2 & Suchleiste im Bottom-Sheet ohne Umwege gefunden. \\
+        \hline
+        4. Einstellungen / Teilen & Ja & 4 & Dunkelmodus schnell gefunden. Swipe-Geste für Share benötigte mehrere Versuche. \\
+        \hline
+    \end{tabular}
+    \caption{Aufgabenergebnisse TP1}
+\end{table}
+
+\subsection*{Beobachtungen}
+
+\textbf{Aufgabe 1:} TP1 erkannte die farbkodierten Pins sofort und tippte direkt auf den
+richtigen Pin. Kein Zögern beim Öffnen des Detail-Sheets.
+\begin{quote}
+    \textit{„Die Farben helfen wirklich, man sieht sofort, dass Orange Kultur bedeutet."}
+\end{quote}
+
+\textbf{Aufgabe 2:} TP1 suchte zunächst nach einem Download-Button auf der Kartenansicht,
+bevor er den Downloads-Tab in der Navigation entdeckte.
+Das Download-Icon innerhalb der Liste wurde dann schnell identifiziert.
+
+\textbf{Aufgabe 3:} Reibungslos abgeschlossen.
+Die Suchleiste im Bottom-Sheet wurde ohne Umwege gefunden und korrekt benutzt.
+
+\textbf{Aufgabe 4:} TP1 fand den Dunkelmodus in den Einstellungen schnell.
+Die Swipe-Geste für die Share-Funktion wurde jedoch nicht sofort entdeckt –
+er benötigte mehrere Versuche.
+\begin{quote}
+    \textit{„Das Wischen hätte ich nicht sofort erwartet –
+    ein kleines Icon oder ein Hinweis wäre hilfreich."}
+\end{quote}
+
+\subsection*{SUS-Fragebogen}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Aussage} & \textbf{Bewertung (1–5)} \\
+        \hline
+        1. Ich würde die App regelmäßig nutzen. & 4 \\
+        \hline
+        2. Ich fand die App unnötig komplex. & 2 \\
+        \hline
+        3. Ich fand die App einfach zu bedienen. & 3 \\
+        \hline
+        4. Ich bräuchte technische Unterstützung. & 2 \\
+        \hline
+        5. Die Funktionen waren gut integriert. & 4 \\
+        \hline
+        6. Es gab zu viele Inkonsistenzen. & 2 \\
+        \hline
+        7. Die meisten Menschen würden die App schnell erlernen. & 4 \\
+        \hline
+        8. Ich fand die App sehr umständlich. & 2 \\
+        \hline
+        9. Ich fühlte mich sicher im Umgang mit der App. & 3 \\
+        \hline
+        10. Ich musste viel lernen, bevor ich die App nutzen konnte. & 1 \\
+        \hline
+    \end{tabular}
+    \caption{SUS-Fragebogen TP1}
+\end{table}
+
+\textbf{SUS-Score:} $((4-1)+(5-2)+(3-1)+(5-2)+(4-1)+(5-2)+(4-1)+(5-2)+(3-1)+(5-1)) \times 2{,}5 = \mathbf{72{,}5}$
+\quad \textit{(gut, Grenzwert: 68)}
+
+\subsection*{Abschlussinterview}
+
+\begin{itemize}
+    \item \textbf{Beste Funktion:} Kartenansicht mit farbkodierten Pins.
+    \item \textbf{Größter Kritikpunkt:} Fehlende Rückmeldung beim Download; Swipe-Geste nicht sichtbar.
+    \item \textbf{Würde die App nutzen:} Ja, besonders zum Erkunden von Wien.
+    \item \textbf{Fehlende Funktion:} Filteroptionen für Pins nach Kategorie.
+    \item \textbf{Vergleich mit anderen Apps:} Google Maps übersichtlicher bei der Navigation,
+          MapApp interessanter für Open-Data-Exploration.
+\end{itemize}
+
+% ============================================================
+\section{Testperson 2 (TP2)}
+% ============================================================
+
+\subsection*{Demografische Informationen}
+\begin{itemize}
+    \item \textbf{Alter:} 29 Jahre
+    \item \textbf{Geschlecht:} Weiblich
+    \item \textbf{Hintergrund:} Nicht-technisch (Wirtschaftsstudium)
+    \item \textbf{Genutzte Karten-Apps:} Google Maps, Wien Karte
+    \item \textbf{Vorwissen über die App:} Keines
+\end{itemize}
+
+\subsection*{Aufgabenergebnisse}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|p{7cm}|}
+        \hline
+        \textbf{Aufgabe} & \textbf{Erledigt} & \textbf{Schwierigkeit (1–7)} & \textbf{Beobachtung} \\
+        \hline
+        1. Karte / Pin & Ja & 3 & Anfangs von Pindichte überfordert, tippte zunächst falschen Pin. \\
+        \hline
+        2. Download & Ja & 4 & Downloads-Tab erst nach Suchphase entdeckt. Tab-Benennung unklar. \\
+        \hline
+        3. Suche & Ja & 3 & Suchte zunächst oben im Bildschirm, Bottom-Sheet nach kurzem Zögern gefunden. \\
+        \hline
+        4. Einstellungen / Teilen & Ja & 5 & Dunkelmodus gefunden. Swipe-Geste ohne Hinweis nicht entdeckt. \\
+        \hline
+    \end{tabular}
+    \caption{Aufgabenergebnisse TP2}
+\end{table}
+
+\subsection*{Beobachtungen}
+
+\textbf{Aufgabe 1:} TP2 war anfangs von der Anzahl der Pins auf der Karte überfordert
+und tippte zunächst auf den falschen Pin.
+\begin{quote}
+    \textit{„Es gibt so viele Pins – vielleicht könnte man sie filtern?"}
+\end{quote}
+
+\textbf{Aufgabe 2:} TP2 bemerkte den Downloads-Tab erst nach einer kurzen Suchphase.
+Die Tab-Struktur \enquote{Entdecken} / \enquote{Installiert} war zunächst unklar.
+\begin{quote}
+    \textit{„Ich hätte nicht gedacht, dass \enquote{Entdecken} bedeutet,
+    dass alle Datensätze dort sind."}
+\end{quote}
+
+\textbf{Aufgabe 3:} TP2 suchte zunächst nach einem Suchfeld oben im Bildschirm.
+Das Bottom-Sheet wurde erst nach einem kurzen Moment gefunden.
+
+\textbf{Aufgabe 4:} TP2 fand den Dunkelmodus nach kurzem Suchen.
+Die Swipe-Geste wurde ohne Hinweis nicht entdeckt;
+die Share-Funktion konnte nur mit einem Hinweis der Testleiterin abgeschlossen werden.
+\begin{quote}
+    \textit{„Ich hätte erwartet, dass es einen Teilen-Button direkt beim Datensatz gibt."}
+\end{quote}
+
+\subsection*{SUS-Fragebogen}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Aussage} & \textbf{Bewertung (1–5)} \\
+        \hline
+        1. Ich würde die App regelmäßig nutzen. & 3 \\
+        \hline
+        2. Ich fand die App unnötig komplex. & 2 \\
+        \hline
+        3. Ich fand die App einfach zu bedienen. & 4 \\
+        \hline
+        4. Ich bräuchte technische Unterstützung. & 2 \\
+        \hline
+        5. Die Funktionen waren gut integriert. & 3 \\
+        \hline
+        6. Es gab zu viele Inkonsistenzen. & 3 \\
+        \hline
+        7. Die meisten Menschen würden die App schnell erlernen. & 3 \\
+        \hline
+        8. Ich fand die App sehr umständlich. & 2 \\
+        \hline
+        9. Ich fühlte mich sicher im Umgang mit der App. & 3 \\
+        \hline
+        10. Ich musste viel lernen, bevor ich die App nutzen konnte. & 2 \\
+        \hline
+    \end{tabular}
+    \caption{SUS-Fragebogen TP2}
+\end{table}
+
+\textbf{SUS-Score:} $\mathbf{62{,}5}$ \quad \textit{(akzeptabel, Verbesserungspotenzial)}
+
+\subsection*{Abschlussinterview}
+
+\begin{itemize}
+    \item \textbf{Beste Funktion:} Offline-Download-Möglichkeit.
+    \item \textbf{Größter Kritikpunkt:} Swipe-Geste nicht intuitiv; Tab-Benennung \enquote{Entdecken} verwirrend.
+    \item \textbf{Würde die App nutzen:} Ja, wenn die Navigation einfacher wäre.
+    \item \textbf{Fehlende Funktion:} Filter für Pins nach Kategorie; sichtbarere Aktionsbuttons.
+    \item \textbf{Vergleich mit anderen Apps:} Wien Karte einfacher zu bedienen,
+          MapApp aber interessanter durch Open-Data-Inhalte.
+\end{itemize}
+
+% ============================================================
+\section{Zusammenfassung}
+% ============================================================
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        & \textbf{TP1} & \textbf{TP2} \\
+        \hline
+        Alle Aufgaben erledigt & Ja & Ja \\
+        \hline
+        Durchschn. Schwierigkeit & 2{,}75 / 7 & 3{,}75 / 7 \\
+        \hline
+        SUS-Score & 72{,}5 & 62{,}5 \\
+        \hline
+    \end{tabular}
+    \caption{Übersicht der Ergebnisse}
+\end{table}
+
+\textbf{Häufigstes Problem:} Die Swipe-to-reveal-Geste wurde von beiden
+Testpersonen nicht ohne Hilfe entdeckt.\\
+\textbf{Stärkste Funktion:} Farbkodierte Pins und das Gesamtkonzept
+wurden durchgehend positiv bewertet.
+
 \end{document}
