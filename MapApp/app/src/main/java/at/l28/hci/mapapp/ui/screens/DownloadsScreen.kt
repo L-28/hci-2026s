@@ -156,7 +156,7 @@ fun DownloadsScreen(
 
         PrimaryTabRow(selectedTabIndex = selectedTabIndex) {
             Tab(selected = selectedTabIndex == 0, onClick = { selectedTabIndex = 0 }) {
-                Text("Entdecken", modifier = Modifier.padding(12.dp))
+                Text("Verfügbar", modifier = Modifier.padding(12.dp))
             }
             Tab(selected = selectedTabIndex == 1, onClick = { selectedTabIndex = 1 }) {
                 Text("Installiert", modifier = Modifier.padding(12.dp))
