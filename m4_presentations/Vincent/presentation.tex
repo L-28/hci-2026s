@@ -7,9 +7,6 @@
 \usepackage[ngerman]{babel}
 \usepackage{csquotes}
 
-\newcommand{\ideaicon}{\ding{72}}
-\newcommand{\screenicon}{\ding{229}}
-\newcommand{\personicon}{\ding{110}}
 \newcommand{\checkicon}{\ding{51}}
 \newcommand{\warnicon}{\ding{115}}
 
@@ -17,56 +14,67 @@
 \title{Offene Daten erlebbar machen}
 \date{}
 \author{Adaktylos Leonidas Odysseas, Baumgartner Vincent Vitez,\\ Neda Nikkhousarighiyeh, Alexander Grath}
-%\institute{Centre for Modern Beamer Themes} % brauchen wir glaub ich nicht
 \begin{document}
-  %\maketitle
 
   % ============================================================
-  \begin{frame}{Testperson 4}
-    \textbf{Profil:} Männlich, 23 J., VWL/Politikwissenschaft, nutzt Google Maps täglich.
-
-    \vspace{0.4cm}
+   \begin{frame}{SUS-Scores}
     \begin{tabular}{@{}lll@{}}
-      \textbf{Aufgabe} & \textbf{Ergebnis} & \textbf{Hauptproblem} \\
+      \textbf{TP} & \textbf{Score} & \textbf{Bewertung} \\
       \hline
-      1 – Kartennavigation & \checkicon\ Bestanden   & Pins zu dicht \\
-      2 – Download         & \checkicon\ Bestanden   & Tab-Name Entdecken  unklar \\
-      3 – Suche            & \checkicon\ Bestanden   & Pin nach Suche nicht markiert \\
-      4 – Teilen           & \warnicon\ Mit Hinweis  & Swipe-Geste nicht erkannt \\
+      TP1 & 72{,}5 & gut \\
+      TP2 & 62{,}5 & akzeptabel \\
+      TP3 & 80{,}0 & exzellent \\
+      TP4 & 77{,}5 & gut \\
+      TP5 & 60{,}0 & akzeptabel \\
+      TP6 & 70{,}0 & gut \\
+      TP7 & 87{,}5 & exzellent \\
+      TP8 & 85{,}0 & exzellent \\
+      \hline
+      \textbf{Ø} & \textbf{74{,}4} & \textbf{gut} \\
     \end{tabular}
-
-    \vspace{0.5cm}
-    \textbf{SUS-Score: 77{,}5} – \textit{gut}
   \end{frame}
 
   % ============================================================
-  \begin{frame}{Testperson 5}
-    \textbf{Profil:} Weiblich, 21 J., Publizistik, nutzt Google Maps gelegentlich.
-
-    \vspace{0.4cm}
-    \begin{tabular}{@{}lll@{}}
-      \textbf{Aufgabe} & \textbf{Ergebnis} & \textbf{Hauptproblem} \\
-      \hline
-      1 – Kartennavigation & \warnicon\ Mit Umweg        & Falschen Pin angetippt \\
-      2 – Download         & \checkicon\ Bestanden       & -- \\
-      3 – Suche            & \warnicon\ Mit Bestätigung  & Kein markierter Pin  \\
-      4 – Teilen           & \warnicon\ Mit Hinweis      & Swipe-Geste nicht erkannt \\
-    \end{tabular}
-
-    \vspace{0.5cm}
-    \textbf{SUS-Score: 60{,}0} – \textit{akzeptabel, Verbesserungspotenzial}
-  \end{frame}
-
-  % ============================================================
-  \begin{frame}{Beobachtungen \& Erkenntnisse}
+  \begin{frame}{Erkenntnisse}
+    \textbf{Stärken}
     \begin{itemize}
-      \setlength\itemsep{0.7em}
-      \item \textbf{Swipe zum Teilen} ohne Hinweis in beiden Fällen nicht entdeckbar
-      \item \textbf{Pin-Hervorhebung} nach Suche fehlt; Nutzer unsicher wo sie sind
-      \item \textbf{Suchleiste} wird oben erwartet (Google-Maps-Konvention)
-      \item \textbf{Download-Feedback} fehlt; Nutzer unsicher ob Aktion erfolgreich war
-      \item \textbf{Pin-Dichte} im Zentrum erschwert gezieltes Antippen
+      \item Farbkodierte Pins intuitiv
+      \item Suche funktioniert für alle
+      \item Konzept als nützlich bewertet
+    \end{itemize}
+
+    \vspace{0.4cm}
+    \textbf{Schwächen}
+    \begin{itemize}
+      \item Swipe-to-reveal nicht entdeckbar
+      \item Pin-Highlight nach Suche fehlt
+      \item Download-Bestätigung fehlt
     \end{itemize}
   \end{frame}
 
-\end{document}
+  % ============================================================
+  \begin{frame}{Reflection}
+    \begin{itemize}
+      \setlength\itemsep{0.7em}
+      \item Faire Aufgabenteilung über alle Meilensteine
+      \item GitHub + Discord haben Kollaboration einfach gehalten
+      \item \textbf{Frühzeitiges Nutzerfeedback} hätte viele Probleme früher aufgedeckt
+      \item \textbf{UX ist mehr als Technik} – Nutzerfreundlichkeit braucht Iteration
+    \end{itemize}
+  \end{frame}
+
+  % ============================================================
+  \begin{frame}{Schlussfolgerung \& Ausblick}
+    MapApp füllt eine reale Lücke bei mobilen Open-Data-Apps für Wien.
+
+    \vspace{0.5cm}
+    \textbf{Nächste Schritte}
+    \begin{itemize}
+      \item Live-Anbindung an \textit{data.wien.gv.at}
+      \item Filteroptionen für Pins
+      \item Swipe durch sichtbares UI-Element ersetzen
+    \end{itemize}
+  \end{frame}
+
+
+ \end{document}
