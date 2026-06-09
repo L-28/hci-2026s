@@ -21,55 +21,38 @@
 \begin{document}
   %\maketitle
 
+  \begin{frame}{Benutzertests – Methode}
+    \textbf{8 Testpersonen}, je 2 pro Teammitglied \quad | \quad ca. 30–45 Min. pro Sitzung
+
+    \vspace{0.4cm}
+    \begin{tabular}{@{}ll@{}}
+      \textbf{Methode} & Think-Aloud, Post-Task-Fragen, SUS, Interview \\[0.4em]
+      \textbf{Aufgabe 1} & Kunsthistorisches Museum auf der Karte finden \\
+      \textbf{Aufgabe 2} & Datensatz \emph{Radwege Wien} herunterladen \\
+      \textbf{Aufgabe 3} & Schloss Schönbrunn über die Suche finden \\
+      \textbf{Aufgabe 4} & Dunkelmodus aktivieren + Datensatz teilen \\
+    \end{tabular}
+  \end{frame}
+
   \begin{frame}{Motivation}
     \begin{itemize}
       \setlength\itemsep{0.6em}
-      \item Wien veröffentlicht \textbf{über 300 offene Datensätze} auf data.wien.gv.at
+      \item Wien veröffentlicht \textbf{über 300 offene Datensätze} auf dem städtischen Open-Data-Portal
       \item Nur \textbf{8 mobile Apps} visualisieren diese Daten – meist veraltet oder spezialisiert
       \item Problem: Daten sind verfügbar, aber \textbf{nicht zugänglich}
-      \item Lösung: \textbf{MapApp} – farbkodierte Pins, Offline-Download, Suche, Dunkelmodus
+      \item Lösung: \textbf{Dat-O-Kart} – farbkodierte Pins, Offline-Download, Suche, Dunkelmodus
     \end{itemize}
   \end{frame}
 
   \begin{frame}{Related Work}
     \begin{itemize}
       \setlength\itemsep{0.5em}
-      \item \textbf{Sayogo et al.} – 66\,\% der Open-Data-Portale bieten keine visuelle Aufbereitung
-      \item \textbf{Simonofski et al.} – gut gestaltete Dashboards erhöhen Verständlichkeit; heterogene Nutzergruppen berücksichtigen
-      \item \textbf{Borkin et al.} – farbige Symbole bleiben besser in Erinnerung → farbkodierte Pins
+      \item Eine Studie zu Open-Government-Data zeigt: die meisten Portale bieten keine visuelle Aufbereitung
+      \item Gut gestaltete Dashboards erhöhen Verständlichkeit – heterogene Nutzergruppen berücksichtigen
+      \item Farbige Symbole bleiben besser in Erinnerung → farbkodierte Pins
       \item \textbf{Konkurrenz}: Wien Karte, Eurostat, OECD Explorer – keine mobile Open-Data-Exploration für Wien
     \end{itemize}
   \end{frame}
 
-  \begin{frame}{Implementation}
-    \begin{itemize}
-      \setlength\itemsep{0.6em}
-      \item Entwickelt mit \textbf{Android Studio}, Zielgerät: Pixel 9 (API 36.1)
-      \item Programmiersprache: \textbf{Kotlin} mit \textbf{Jetpack Compose}
-      \item Design-System: \textbf{Material 3} – modern und barrierefrei
-      \item KI-Unterstützung: \textbf{Gemini} direkt in Android Studio integriert
-      \item Keine größeren technischen Herausforderungen – gegenseitige Hilfe und KI-Unterstützung
-    \end{itemize}
-  \end{frame}
-
-  \begin{frame}{Meine Testpersonen}
-    \textbf{TP1} – Männlich, 26 J., Informatikstudium \hfill SUS: \textbf{72{,}5} (gut)
-    \begin{itemize}
-      \item Alle Aufgaben erfolgreich abgeschlossen
-      \item Swipe-Geste zum Teilen nicht sofort gefunden
-    \end{itemize}
-
-    \vspace{0.4cm}
-
-    \textbf{TP2} – Weiblich, 29 J., Wirtschaftsstudium \hfill SUS: \textbf{62{,}5} (akzeptabel)
-    \begin{itemize}
-      \item Pin-Dichte auf der Karte anfangs verwirrend
-      \item Tab-Name \enquote{Entdecken} unklar
-      \item Swipe-Geste ohne Hinweis nicht entdeckt
-    \end{itemize}
-
-    \vspace{0.4cm}
-    \alert{Gemeinsames Problem:} Swipe-Geste zum Teilen ohne Hinweis nicht auffindbar.
-  \end{frame}
 
 \end{document}
