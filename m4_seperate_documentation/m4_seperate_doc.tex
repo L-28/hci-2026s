@@ -14,7 +14,6 @@
 \usepackage{float}
 \usepackage{subcaption}
 \usepackage{csquotes}
-\usepackage{multicol}
 \bibliographystyle{ieeetr}
 %----------------------------------------------------------------------------
 \graphicspath{ {./images/} }
@@ -24,7 +23,7 @@
 \pagestyle{fancy}	% activate fancy style
 \fancyhf{}			% clear fancy settings
 % Header
-\fancyhead[L]{Meilenstein 4}
+\fancyhead[L]{Meilenstein 4 Zusatz}
 \fancyhead[R]{v1.0}
 % Footer
 \fancyfoot[C]{Seite \thepage}
@@ -54,7 +53,7 @@
 %
 % sub-title of the document
 \begin{center}
-\section*{M4 Usability Evaluierung, Weiterentwicklung, und Abschlussbericht}
+\section*{Zusätzliche Dokumentation\\Benutzertests\\Lösungsvorschläge}
 \end{center}
 
 % universität wien logo
@@ -78,24 +77,8 @@
 %
 % Screenshots und Beschreibung des Prototyp hinsichtlich Funktionen, Inhalte und Interaktionen 
 % (pdf, ca. 2-3 Seiten Text und Screenshots)
-%\input{sections/Benutzertests.tex}
-% Abschlussbericht
-\begin{multicols}{2}
-	\input{sections/Motivation.tex}
-	\input{sections/Related_Work.tex}
-\end{multicols}
-\bigskip
-\begin{multicols}{2}
-	\input{sections/Implementation.tex}
-\end{multicols}
-\newpage
-\input{sections/Design.tex}
-\input{sections/Evaluation.tex} % multicols done inside, chart won't work without major changes
-%\input{sections/Lösungsvorschläge.tex}
-\begin{multicols}{2}
-	\input{sections/Reflection.tex}
-	\input{sections/Conclusion.tex}
-\end{multicols}
+\input{sections/Benutzertests.tex}
+\input{sections/Lösungsvorschläge.tex}
 %
 \newpage
 %
