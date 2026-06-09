@@ -265,24 +265,39 @@ fun HomeScreen(
                         val dy = nearest.position.latitude - clickedPosition.latitude
                         if (dx * dx + dy * dy < 0.0001) {
                             selectedPin = nearest
+                            scope.launch {
+                                cameraState.animateTo(
+                                    CameraPosition(
+                                        target = nearest.position,
+                                        zoom = 15.0
+                                    )
+                                )
+                            }
                             ClickResult.Consume
                         } else ClickResult.Pass
                     } else ClickResult.Pass
                 }
             ) {
                 val pinSource = rememberGeoJsonSource(
-                    data = GeoJsonData.Features(
-                        FeatureCollection(
-                            pins.map { pin ->
-                                val dataset = DataProvider.allDatasets.find { it.id == pin.datasetId }
-                                val color = DataProvider.getColorStringForCategory(dataset?.category ?: "")
-                                Feature(
-                                    geometry = Point(pin.position),
-                                    properties = JsonObject(mapOf("color" to JsonPrimitive(color)))
-                                )
-                            }
+                    data = remember(selectedPin) {
+                        GeoJsonData.Features(
+                            FeatureCollection(
+                                pins.map { pin ->
+                                    val dataset = DataProvider.allDatasets.find { it.id == pin.datasetId }
+                                    val color = DataProvider.getColorStringForCategory(dataset?.category ?: "")
+                                    Feature(
+                                        geometry = Point(pin.position),
+                                        properties = JsonObject(
+                                            mapOf(
+                                                "color" to JsonPrimitive(color),
+                                                "selected" to JsonPrimitive(pin.id == selectedPin?.id)
+                                            )
+                                        )
+                                    )
+                                }
+                            )
                         )
-                    )
+                    }
                 )
 
                 SymbolLayer(
@@ -293,7 +308,10 @@ fun HomeScreen(
                         drawAsSdf = true
                     ),
                     iconColor = feature["color"].convertToColor(),
-                    iconSize = const(1.5f),
+                    iconSize = switch(
+                        condition(feature["selected"].convertToBoolean(), const(2.5f)),
+                        fallback = const(1.5f)
+                    ),
                     iconAllowOverlap = const(true)
                 )
             }
