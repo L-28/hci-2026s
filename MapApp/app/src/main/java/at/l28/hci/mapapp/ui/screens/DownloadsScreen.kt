@@ -1,13 +1,11 @@
 package at.l28.hci.mapapp.ui.screens
 
-import kotlinx.coroutines.launch
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.Animatable
-import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import at.l28.hci.mapapp.viewmodels.BookmarksViewModel
+import at.l28.hci.mapapp.viewmodels.DatasetsViewModel
+import at.l28.hci.mapapp.viewmodels.DownloadState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -18,13 +16,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -33,46 +33,42 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
-import at.l28.hci.mapapp.data.DataProvider
-import at.l28.hci.mapapp.models.Dataset
-import at.l28.hci.mapapp.models.DownloadState
 import kotlin.math.roundToInt
 
-import androidx.compose.ui.text.style.TextAlign
-import at.l28.hci.mapapp.ui.theme.MapAppTheme
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.clickable
+data class Dataset(
+    val id: String,
+    val name: String,
+    val category: String,
+    val description: String,
+    val size: String,
+    val initialState: DownloadState = DownloadState.NOT_DOWNLOADED,
+    val icon: ImageVector = Icons.Default.Stars
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DownloadsScreen(
     bookmarksViewModel: BookmarksViewModel = viewModel(),
-    onNavigateToPin: (String) -> Unit = {}
+    datasetsViewModel: DatasetsViewModel = viewModel()
 ) {
-    val context = LocalContext.current
-    val prefs = remember { context.getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE) }
     var searchQuery by remember { mutableStateOf("") }
-    var searchExpanded by remember { mutableStateOf(false) }
+    var selectedTabIndex by remember { mutableStateOf(0) }
 
-    // Automatically expand while typing
-    LaunchedEffect(searchQuery) {
-        if (searchQuery.isNotEmpty()) searchExpanded = true
+    val allDatasets = remember {
+        listOf(
+            Dataset("map_vienna", "Wien - Basiskarte", "Basis", "Vollständige Offline-Karte für das gesamte Stadtgebiet.", "412 MB", DownloadState.DOWNLOADED),
+            Dataset("map_vienna_center", "Wien - Innere Stadt (HD)", "Basis", "Hochauflösende Details für den 1. Bezirk.", "85 MB", DownloadState.NOT_DOWNLOADED),
+            Dataset("wl_network", "Wiener Linien - Netz", "Verkehr", "S-Bahn, U-Bahn, Straßenbahn und Busstationen.", "12 MB", DownloadState.DOWNLOADED, Icons.Default.DirectionsBus),
+            Dataset("bike_lanes", "Radwege Wien", "Verkehr", "Umfassendes Verzeichnis aller Radwege und Abstellplätze.", "4.5 MB", DownloadState.NOT_DOWNLOADED, Icons.AutoMirrored.Filled.DirectionsBike),
+            Dataset("trees", "Wiener Baumkataster", "Umwelt", "Standorte und Arten von über 200.000 Stadtbäumen.", "38 MB", DownloadState.NOT_DOWNLOADED, Icons.Default.Park),
+            Dataset("fountains", "Trinkbrunnen & Kühlung", "Umwelt", "Wasserspender und Nebelduschen für heiße Tage.", "1.2 MB", DownloadState.DOWNLOADED, Icons.Default.WaterDrop),
+            Dataset("museums", "Kultur & Tourismus", "Kultur", "Museen, Denkmäler und historische Sehenswürdigkeiten.", "15 MB", DownloadState.NOT_DOWNLOADED, Icons.Default.Museum),
+            Dataset("history_1912", "Stadtplan 1912", "Kultur", "Historische Kartenebene für Zeitreisen durch Wien.", "1.2 GB", DownloadState.NOT_DOWNLOADED, Icons.Default.HistoryEdu),
+            Dataset("wifi", "Free Wave Hotspots", "Infrastruktur", "Öffentliche WLAN-Standorte in ganz Wien.", "0.8 MB", DownloadState.DOWNLOADED, Icons.Default.Wifi)
+        )
     }
 
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    var onboardingShown by remember {
-        mutableStateOf(prefs.getBoolean("downloads_swipe_onboarding_shown", false))
-    }
-
-    val allDatasets = remember { DataProvider.allDatasets }
-
-    val downloadStates = remember {
-        mutableStateMapOf<String, DownloadState>().apply {
-            allDatasets.forEach { put(it.id, it.initialState) }
-        }
-    }
+    val downloadStates = datasetsViewModel.downloadStates
     val downloadProgress = remember { mutableStateMapOf<String, Float>() }
 
     val filteredDatasets = allDatasets.filter {
@@ -84,13 +80,11 @@ fun DownloadsScreen(
         }
     }
 
-    var expandedDatasetId by remember { mutableStateOf<String?>(null) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color(0xFFFBF8FF))
     ) {
         Text(
             text = "Downloads",
@@ -99,64 +93,27 @@ fun DownloadsScreen(
             modifier = Modifier.padding(16.dp)
         )
 
-        val suggestions = remember(searchQuery) {
-            if (searchQuery.isBlank()) emptyList()
-            else allDatasets.filter {
-                it.name.contains(searchQuery, ignoreCase = true) ||
-                        it.category.contains(searchQuery, ignoreCase = true)
-            }
-        }
-
-        SearchBar(
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = searchQuery,
-                    onQueryChange = { searchQuery = it },
-                    onSearch = { searchExpanded = false },
-                    expanded = searchExpanded,
-                    onExpandedChange = { searchExpanded = it },
-                    placeholder = { Text("Karten oder Layer suchen...") },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) {
-                                Icon(Icons.Default.Close, contentDescription = "Clear")
-                            }
-                        }
-                    },
-                    modifier = Modifier.onFocusChanged { 
-                        if (it.isFocused && !searchExpanded) {
-                            searchExpanded = true
-                        }
-                    }
-                )
-            },
-            expanded = searchExpanded,
-            onExpandedChange = { searchExpanded = it },
+        TextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-        ) {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(suggestions) { dataset ->
-                    ListItem(
-                        headlineContent = { Text(dataset.name) },
-                        supportingContent = { Text(dataset.category) },
-                        leadingContent = { dataset.icon?.let { Icon(it, contentDescription = null) } },
-                        modifier = Modifier.clickable {
-                            searchQuery = dataset.name
-                            searchExpanded = false
-                        }
-                    )
-                }
-            }
-        }
+            placeholder = { Text("Karten oder Layer suchen...") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            shape = RoundedCornerShape(12.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            )
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         PrimaryTabRow(selectedTabIndex = selectedTabIndex) {
             Tab(selected = selectedTabIndex == 0, onClick = { selectedTabIndex = 0 }) {
-                Text("Verfügbar", modifier = Modifier.padding(12.dp))
+                Text("Entdecken", modifier = Modifier.padding(12.dp))
             }
             Tab(selected = selectedTabIndex == 1, onClick = { selectedTabIndex = 1 }) {
                 Text("Installiert", modifier = Modifier.padding(12.dp))
@@ -164,8 +121,7 @@ fun DownloadsScreen(
         }
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(filteredDatasets.size) { index ->
-                val dataset = filteredDatasets[index]
+            items(filteredDatasets) { dataset ->
                 val state = downloadStates[dataset.id] ?: DownloadState.NOT_DOWNLOADED
                 val progress = downloadProgress[dataset.id] ?: 0f
 
@@ -174,15 +130,6 @@ fun DownloadsScreen(
                     state = state,
                     progress = progress,
                     isBookmarked = bookmarksViewModel.isBookmarked(dataset.id),
-                    isExpanded = expandedDatasetId == dataset.id,
-                    shouldAnimateOnboarding = !onboardingShown && index == 0,
-                    onOnboardingComplete = {
-                        onboardingShown = true
-                        prefs.edit().putBoolean("downloads_swipe_onboarding_shown", true).apply()
-                    },
-                    onToggleExpand = {
-                        expandedDatasetId = if (expandedDatasetId == dataset.id) null else dataset.id
-                    },
                     onBookmark = { bookmarksViewModel.toggle(dataset) },
                     onDownload = {
                         downloadStates[dataset.id] = DownloadState.DOWNLOADING
@@ -190,8 +137,7 @@ fun DownloadsScreen(
                     onDelete = {
                         downloadStates[dataset.id] = DownloadState.NOT_DOWNLOADED
                         downloadProgress.remove(dataset.id)
-                    },
-                    onNavigateToPin = onNavigateToPin
+                    }
                 )
 
                 if (state == DownloadState.DOWNLOADING) {
@@ -216,125 +162,100 @@ fun SwipeableDatasetItem(
     state: DownloadState,
     progress: Float,
     isBookmarked: Boolean = false,
-    isExpanded: Boolean = false,
-    shouldAnimateOnboarding: Boolean = false,
-    onOnboardingComplete: () -> Unit = {},
-    onToggleExpand: () -> Unit = {},
     onBookmark: () -> Unit = {},
     onDownload: () -> Unit,
-    onDelete: () -> Unit,
-    onNavigateToPin: (String) -> Unit = {}
+    onDelete: () -> Unit
 ) {
     val context = LocalContext.current
+    var offsetX by remember { mutableStateOf(0f) }
     val menuWidth = 200.dp
     val menuWidthPx = with(LocalDensity.current) { menuWidth.toPx() }
 
-    val scope = rememberCoroutineScope()
-    val offsetX = remember { Animatable(0f) }
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = offsetX,
+        label = "offset"
+    )
 
-    LaunchedEffect(shouldAnimateOnboarding) {
-        if (shouldAnimateOnboarding) {
-            delay(500) // Small delay before starting
-            offsetX.animateTo(
-                targetValue = -menuWidthPx,
-                animationSpec = tween(durationMillis = 1000)
-            )
-            delay(1200) // Pause to let the user see actions
-            offsetX.animateTo(
-                targetValue = 0f,
-                animationSpec = tween(durationMillis = 1000)
-            )
-            onOnboardingComplete()
-        }
-    }
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color(0xFFFBF8FF))
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                onClick = { onBookmark(); offsetX = 0f },
+                shape = CircleShape,
+                color = if (isBookmarked) MaterialTheme.colorScheme.primaryContainer
+                        else MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(48.dp)
             ) {
-                Surface(
-                    onClick = { onBookmark(); scope.launch { offsetX.snapTo(0f) } },
-                    shape = CircleShape,
-                    color = if (isBookmarked) MaterialTheme.colorScheme.primaryContainer
-                    else MaterialTheme.colorScheme.secondaryContainer,
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                            contentDescription = "Lesezeichen",
-                            modifier = Modifier.size(24.dp),
-                            tint = if (isBookmarked) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Surface(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_SUBJECT, dataset.name)
-                            putExtra(Intent.EXTRA_TEXT, "${dataset.name}\n${dataset.description}\nhttps://data.wien.gv.at/")
-                        }
-                        context.startActivity(Intent.createChooser(intent, null))
-                        scope.launch { offsetX.snapTo(0f) }
-                    },
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Share, contentDescription = "Share", modifier = Modifier.size(24.dp))
-                    }
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Surface(
-                    onClick = {
-                        onDelete()
-                        scope.launch { offsetX.snapTo(0f) }
-                    },
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp))
-                    }
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                        contentDescription = "Lesezeichen",
+                        modifier = Modifier.size(24.dp),
+                        tint = if (isBookmarked) MaterialTheme.colorScheme.primary
+                               else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
-
+            Spacer(modifier = Modifier.width(8.dp))
             Surface(
-                modifier = Modifier
-                    .offset { IntOffset(offsetX.value.roundToInt(), 0) }
-                    .draggable(
-                        state = rememberDraggableState { delta ->
-                            val newOffset = (offsetX.value + delta).coerceIn(-menuWidthPx, 0f)
-                            scope.launch { offsetX.snapTo(newOffset) }
-                        },
-                        orientation = Orientation.Horizontal,
-                        onDragStopped = {
-                            val targetValue = if (offsetX.value < -menuWidthPx / 2) -menuWidthPx else 0f
-                            scope.launch {
-                                offsetX.animateTo(
-                                    targetValue = targetValue,
-                                    animationSpec = tween(durationMillis = 300)
-                                )
-                            }
-                        }
-                    )
-                    .clickable { onToggleExpand() }
-                    .fillMaxWidth(),
-                color = MaterialTheme.colorScheme.background
+                onClick = {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, dataset.name)
+                        putExtra(Intent.EXTRA_TEXT, "${dataset.name}\n${dataset.description}\nhttps://data.wien.gv.at/")
+                    }
+                    context.startActivity(Intent.createChooser(intent, null))
+                    offsetX = 0f
+                },
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(48.dp)
             ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.Share, contentDescription = "Share", modifier = Modifier.size(24.dp))
+                }
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Surface(
+                onClick = {
+                    onDelete()
+                    offsetX = 0f
+                },
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White, modifier = Modifier.size(24.dp))
+                }
+            }
+        }
+
+        Surface(
+            modifier = Modifier
+                .offset { IntOffset(animatedOffsetX.roundToInt(), 0) }
+                .draggable(
+                    state = rememberDraggableState { delta ->
+                        val newOffset = (offsetX + delta).coerceIn(-menuWidthPx, 0f)
+                        offsetX = newOffset
+                    },
+                    orientation = Orientation.Horizontal,
+                    onDragStopped = {
+                        offsetX = if (offsetX < -menuWidthPx / 2) -menuWidthPx else 0f
+                    }
+                )
+                .fillMaxWidth(),
+            color = Color(0xFFFBF8FF)
+        ) {
+            Column {
                 ListItem(
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     headlineContent = {
@@ -350,14 +271,12 @@ fun SwipeableDatasetItem(
                         )
                     },
                     leadingContent = {
-                        dataset.icon?.let {
-                            Icon(
-                                imageVector = it,
-                                contentDescription = null,
-                                modifier = Modifier.size(28.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        } ?: Spacer(modifier = Modifier.size(28.dp))
+                        Icon(
+                            imageVector = dataset.icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     },
                     trailingContent = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -369,7 +288,7 @@ fun SwipeableDatasetItem(
                             Spacer(modifier = Modifier.width(8.dp))
                             when (state) {
                                 DownloadState.NOT_DOWNLOADED -> {
-                                    IconButton(onClick = { onDownload(); onToggleExpand() }) {
+                                    IconButton(onClick = onDownload) {
                                         Icon(Icons.Default.FileDownload, contentDescription = "Download")
                                     }
                                 }
@@ -381,76 +300,30 @@ fun SwipeableDatasetItem(
                                     )
                                 }
                                 DownloadState.DOWNLOADED -> {
-                                    Icon(
-                                        if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
+                                    IconButton(onClick = onDelete) {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "Delete",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 )
-            }
-        }
-
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(),
-            exit = shrinkVertically()
-        ) {
-            val associatedPins = remember(dataset.id) {
-                DataProvider.allPins.filter { it.datasetId == dataset.id }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 56.dp, end = 16.dp, bottom = 8.dp)
-            ) {
-                Text(
-                    "Enthaltene Orte:",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
-                associatedPins.forEach { pin ->
-                    ListItem(
-                        headlineContent = { Text(pin.name) },
-                        supportingContent = { Text(pin.description) },
-                        leadingContent = { Icon(Icons.Default.Place, contentDescription = null, modifier = Modifier.size(20.dp)) },
-                        trailingContent = { Icon(Icons.Default.Map, contentDescription = "Auf Karte zeigen") },
-                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                        modifier = Modifier.clickable { onNavigateToPin(pin.id) }
-                    )
-                }
             }
         }
-
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            thickness = 0.5.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DownloadsScreenPreview() {
-    MapAppTheme(darkTheme = false) {
-        Surface {
-            DownloadsScreen()
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DownloadsScreenDarkPreview() {
-    MapAppTheme(darkTheme = true) {
-        Surface {
-            DownloadsScreen()
-        }
-    }
+    DownloadsScreen()
 }
