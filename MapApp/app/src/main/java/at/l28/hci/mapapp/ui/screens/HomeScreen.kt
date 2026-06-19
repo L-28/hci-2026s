@@ -1,28 +1,26 @@
 package at.l28.hci.mapapp.ui.screens
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AccountTree
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.URL
 import kotlinx.serialization.json.JsonObject
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
@@ -44,38 +42,21 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-import at.l28.hci.mapapp.viewmodels.DatasetsViewModel
-import at.l28.hci.mapapp.viewmodels.MapPin
-
-private val categoryColors = mapOf(
-    "Verkehr" to Color(0xFF1565C0),
-    "Umwelt" to Color(0xFF2E7D32),
-    "Kultur" to Color(0xFFE65100),
-    "Infrastruktur" to Color(0xFF6A1B9A),
-)
-
-private val categorySizes = mapOf(
-    "Verkehr" to 1.8f,
-    "Umwelt" to 1.2f,
-    "Kultur" to 1.6f,
-    "Infrastruktur" to 1.3f,
-)
-
-private fun MapPin.toFeature() = Feature(
-    geometry = Point(Position(longitude, latitude)),
-    properties = JsonObject(emptyMap())
-)
-
-private fun allPinFeatures(pins: List<MapPin>) = GeoJsonData.Features(
-    FeatureCollection(pins.map { it.toFeature() })
-)
+import kotlinx.serialization.json.JsonPrimitive
+import at.l28.hci.mapapp.data.DataProvider
+import at.l28.hci.mapapp.models.PinInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
+fun HomeScreen(
+    initialPinId: String? = null,
+    onNavigateToDownloads: () -> Unit = {},
+    onPinNavigated: () -> Unit = {}
+) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(
-        initialValue = SheetValue.PartiallyExpanded
+        initialValue = SheetValue.PartiallyExpanded,
+        skipHiddenState = true
     )
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = sheetState
@@ -83,15 +64,18 @@ fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
 
     val density = LocalDensity.current
     var containerSize by remember { mutableStateOf(IntSize.Zero) }
-
+    
     val ornamentPaddingBottom by remember {
         derivedStateOf {
             val sheetTopOffset = try { sheetState.requireOffset() } catch (_: Exception) { 0f }
             val sheetTopDp = with(density) { sheetTopOffset.toDp() }
             val containerHeightDp = with(density) { containerSize.height.toDp() }
+            
+            // Padding from bottom of the Map container = ContainerHeight - SheetTop
             val padding = if (containerHeightDp > 0.dp) {
                 (containerHeightDp - sheetTopDp).coerceAtLeast(0.dp)
-            } else 140.dp
+            } else 140.dp // Fallback to peek height
+
             padding + 16.dp
         }
     }
@@ -103,9 +87,44 @@ fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
         )
     )
 
-    val activePins = datasetsViewModel.getActivePins()
-    var selectedPin by remember { mutableStateOf<MapPin?>(null) }
+    val mapStyle by produceState<BaseStyle>(
+        initialValue = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty")
+    ) {
+        withContext(Dispatchers.IO) {
+            try {
+                val styleJson = URL("https://tiles.openfreemap.org/styles/liberty").readText()
+                val localizedJson = styleJson
+                    .replace("\"name:en\"", "\"name:de\"")
+                    .replace("\"name_en\"", "\"name_de\"")
+                    .replace("{name}", "{name:de}")
+                value = BaseStyle.Json(localizedJson)
+            } catch (e: Exception) {
+                // Fallback to default
+            }
+        }
+    }
+
+    val pins = remember { DataProvider.allPins }
+
+    var selectedPin by remember { mutableStateOf<PinInfo?>(null) }
+
+    LaunchedEffect(initialPinId) {
+        if (initialPinId != null) {
+            val target = pins.find { it.id == initialPinId }
+            if (target != null) {
+                selectedPin = target
+                cameraState.animateTo(
+                    CameraPosition(
+                        target = target.position,
+                        zoom = 15.0
+                    )
+                )
+                onPinNavigated()
+            }
+        }
+    }
     val recentSearches = remember { mutableStateListOf<String>() }
+
     val pinPainter = rememberVectorPainter(Icons.Default.Place)
 
     if (selectedPin != null) {
@@ -121,18 +140,57 @@ fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     selectedPin!!.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    selectedPin!!.category,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = categoryColors[selectedPin!!.category] ?: MaterialTheme.colorScheme.primary
-                )
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                val associatedDataset = remember(selectedPin) {
+                    DataProvider.allDatasets.find { it.id == selectedPin!!.datasetId }
+                }
+                
+                associatedDataset?.let { dataset ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = dataset.icon ?: Icons.Default.Stars,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    "Datensatz",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    dataset.name,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
+                            IconButton(onClick = {
+                                selectedPin = null
+                                onNavigateToDownloads()
+                            }) {
+                                Icon(  Icons.AutoMirrored.Default.ArrowForward, contentDescription = "Datensatz anzeigen")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -143,18 +201,40 @@ fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
             SearchSheetContent(
                 recentSearches = recentSearches,
                 onSearch = { query ->
-                    if (query.isNotBlank() && !recentSearches.contains(query)) {
-                        recentSearches.add(0, query)
-                        if (recentSearches.size > 5) recentSearches.removeLast()
+                    if (query.isNotBlank()) {
+                        if (!recentSearches.contains(query)) {
+                            recentSearches.add(0, query)
+                            if (recentSearches.size > 5) recentSearches.removeLast()
+                        }
+                        
+                        // Search for pin
+                        val pin = pins.find {
+                            it.name.contains(query, ignoreCase = true) ||
+                            it.description.contains(query, ignoreCase = true)
+                        }
+                        if (pin != null) {
+                            selectedPin = pin
+                            scope.launch {
+                                cameraState.animateTo(
+                                    CameraPosition(target = pin.position, zoom = 15.0)
+                                )
+                                sheetState.partialExpand()
+                            }
+                        }
                     }
                 },
-                onDismiss = { scope.launch { sheetState.hide() } }
+                onExpand = {
+                    scope.launch { sheetState.expand() }
+                },
+                onDismiss = {
+                    scope.launch { sheetState.partialExpand() }
+                }
             )
         },
         sheetPeekHeight = 125.dp,
         sheetContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f),
         sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
-    ) { _ ->
+    ) { _ -> // Use _ to ignore innerPadding which was pushing map content up
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -163,57 +243,85 @@ fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
             MaplibreMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraState = cameraState,
-                baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                baseStyle = mapStyle,
                 options = MapOptions(
                     ornamentOptions = OrnamentOptions(
-                        isScaleBarEnabled = false,
+                        isScaleBarEnabled = false, // Disable native scale bar to use custom one
+                        isCompassEnabled = false,
                         logoAlignment = Alignment.BottomStart,
                         attributionAlignment = Alignment.BottomEnd,
+
                         padding = PaddingValues(bottom = ornamentPaddingBottom, start = 16.dp, end = 16.dp)
                     )
                 ),
                 onMapClick = { clickedPosition, _ ->
-                    val nearest = activePins.minByOrNull { pin ->
-                        val dx = pin.longitude - clickedPosition.longitude
-                        val dy = pin.latitude - clickedPosition.latitude
+                    val nearest = pins.minByOrNull { pin ->
+                        val dx = pin.position.longitude - clickedPosition.longitude
+                        val dy = pin.position.latitude - clickedPosition.latitude
                         dx * dx + dy * dy
                     }
                     if (nearest != null) {
-                        val dx = nearest.longitude - clickedPosition.longitude
-                        val dy = nearest.latitude - clickedPosition.latitude
+                        val dx = nearest.position.longitude - clickedPosition.longitude
+                        val dy = nearest.position.latitude - clickedPosition.latitude
                         if (dx * dx + dy * dy < 0.0001) {
                             selectedPin = nearest
+                            scope.launch {
+                                cameraState.animateTo(
+                                    CameraPosition(
+                                        target = nearest.position,
+                                        zoom = 15.0
+                                    )
+                                )
+                            }
                             ClickResult.Consume
                         } else ClickResult.Pass
                     } else ClickResult.Pass
                 }
             ) {
-                val pinSource = rememberGeoJsonSource(data = allPinFeatures(activePins))
+                val pinSource = rememberGeoJsonSource(
+                    data = remember(selectedPin) {
+                        GeoJsonData.Features(
+                            FeatureCollection(
+                                pins.map { pin ->
+                                    val dataset = DataProvider.allDatasets.find { it.id == pin.datasetId }
+                                    val color = DataProvider.getColorStringForCategory(dataset?.category ?: "")
+                                    Feature(
+                                        geometry = Point(pin.position),
+                                        properties = JsonObject(
+                                            mapOf(
+                                                "color" to JsonPrimitive(color),
+                                                "selected" to JsonPrimitive(pin.id == selectedPin?.id)
+                                            )
+                                        )
+                                    )
+                                }
+                            )
+                        )
+                    }
+                )
 
                 SymbolLayer(
                     id = "pins",
                     source = pinSource,
-                    iconImage = image(value = pinPainter, drawAsSdf = true),
-                    iconColor = const(MaterialTheme.colorScheme.primary),
-                    iconSize = const(1.5f),
+                    iconImage = image(
+                        value = pinPainter,
+                        drawAsSdf = true
+                    ),
+                    iconColor = feature["color"].convertToColor(),
+                    iconSize = switch(
+                        condition(feature["selected"].convertToBoolean(), const(2.5f)),
+                        fallback = const(1.5f)
+                    ),
                     iconAllowOverlap = const(true)
                 )
             }
 
+            // Custom Compose ScaleBar overlay
             ScaleBar(
                 metersPerDp = cameraState.metersPerDpAtTarget,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = ornamentPaddingBottom + 24.dp, end = 16.dp)
-            )
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(16.dp)
-                    .width(4.dp)
-                    .height(200.dp)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), CircleShape)
             )
         }
     }
@@ -224,9 +332,36 @@ fun HomeScreen(datasetsViewModel: DatasetsViewModel = viewModel()) {
 fun SearchSheetContent(
     recentSearches: List<String> = emptyList(),
     onSearch: (String) -> Unit = {},
+    onExpand: () -> Unit = {},
     onDismiss: () -> Unit
 ) {
     var query by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    // Update expanded based on callback from SearchBar
+    val handleExpandedChange: (Boolean) -> Unit = {
+        expanded = it
+        if (it) onExpand()
+    }
+
+    // Automatically expand while typing
+    LaunchedEffect(query) {
+        if (query.isNotEmpty() && !expanded) {
+            handleExpandedChange(true)
+        }
+    }
+
+    val pins = remember { DataProvider.allPins }
+    val suggestions = remember(query) {
+        if (query.isBlank()) {
+            recentSearches.map { SearchResult(it, "Frühere Suche") }
+        } else {
+            pins.filter {
+                it.name.contains(query, ignoreCase = true) ||
+                        it.description.contains(query, ignoreCase = true)
+            }.map { SearchResult(it.name, it.description) }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -240,55 +375,97 @@ fun SearchSheetContent(
                     onQueryChange = { query = it },
                     onSearch = {
                         onSearch(it)
-                        query = ""
+                        expanded = false
                     },
-                    expanded = false,
-                    onExpandedChange = {},
+                    expanded = expanded,
+                    onExpandedChange = handleExpandedChange,
                     placeholder = { Text("Suchen") },
                     leadingIcon = {
-                        IconButton(onClick = onDismiss) {
+                        IconButton(onClick = {
+                            if (expanded) {
+                                expanded = false
+                                query = ""
+                            }
+                            onDismiss()
+                        }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         }
                     },
-                    trailingIcon = { Icon(Icons.Default.Mic, contentDescription = null) },
+                    trailingIcon = {
+                        if (query.isNotEmpty()) {
+                            IconButton(onClick = { query = "" }) {
+                                Icon(Icons.Default.Close, contentDescription = "Clear")
+                            }
+                        } else {
+                            Icon(Icons.Default.Mic, contentDescription = null)
+                        }
+                    },
+                    modifier = Modifier.onFocusChanged { 
+                        if (it.isFocused && !expanded) {
+                            handleExpandedChange(true)
+                        }
+                    }
                 )
             },
-            expanded = false,
-            onExpandedChange = {},
+            expanded = expanded,
+            onExpandedChange = handleExpandedChange,
             modifier = Modifier.fillMaxWidth(),
             windowInsets = WindowInsets(0)
-        ) { }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (recentSearches.isNotEmpty()) {
-            Text(
-                "Frühere Suchen",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(recentSearches) { search ->
-                    ListItem(
-                        headlineContent = { Text(search) },
-                        leadingContent = { Icon(Icons.Default.History, contentDescription = null) }
-                    )
-                }
-            }
-        } else {
-            val suggestions = listOf(
-                SearchResult("Voranschlag Wien 2026 (Gemeinde)", "Voranschlag der Gemeinde - Einnahmen und..."),
-                SearchResult("Verkehrsnetz der Wiener Linien Wien", "Länge des Verkehrsnetzes der Wiener Linien..."),
-                SearchResult("Bericht - Laichhilfen Wienfluss 2023 Wien", "Ergebnisse des Laichhilfeprojekts im...")
-            )
+        ) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(suggestions) { result ->
                     ListItem(
                         headlineContent = { Text(result.title, fontWeight = FontWeight.Bold) },
                         supportingContent = { Text(result.description) },
-                        leadingContent = { Icon(Icons.Default.AccountTree, contentDescription = null) }
+                        leadingContent = {
+                            Icon(
+                                if (query.isBlank()) Icons.Default.History else Icons.Default.Place,
+                                contentDescription = null
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onSearch(result.title)
+                            expanded = false
+                        }
                     )
+                }
+            }
+        }
+
+        if (!expanded) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (recentSearches.isNotEmpty()) {
+                Text(
+                    "Frühere Suchen",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(recentSearches) { search ->
+                        ListItem(
+                            headlineContent = { Text(search) },
+                            leadingContent = { Icon(Icons.Default.History, contentDescription = null) },
+                            modifier = Modifier.clickable { onSearch(search) }
+                        )
+                    }
+                }
+            } else {
+                val staticSuggestions = listOf(
+                    SearchResult("Stephansdom", "Wahrzeichen Wiens, 1. Bezirk"),
+                    SearchResult("Schloss Schönbrunn", "Kaiserliche Sommerresidenz"),
+                    SearchResult("Prater Riesenrad", "Wiener Riesenrad, 2. Bezirk")
+                )
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(staticSuggestions) { result ->
+                        ListItem(
+                            headlineContent = { Text(result.title, fontWeight = FontWeight.Bold) },
+                            supportingContent = { Text(result.description) },
+                            leadingContent = { Icon(Icons.Default.AccountTree, contentDescription = null) },
+                            modifier = Modifier.clickable { onSearch(result.title) }
+                        )
+                    }
                 }
             }
         }
